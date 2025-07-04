@@ -1,0 +1,77 @@
+<svg width="400" height="300" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background gradient mimicking coastal sky -->
+  <defs>
+    <linearGradient id="coastalSky" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#87CEEB;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#E0F6FF;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="oceanGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#1E90FF;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#4169E1;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="fortGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#D2691E;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#8B4513;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="beachGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#F4A460;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#DEB887;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Sky -->
+  <rect width="400" height="120" fill="url(#coastalSky)"/>
+  
+  <!-- Ocean -->
+  <rect x="0" y="180" width="400" height="120" fill="url(#oceanGradient)"/>
+  
+  <!-- Beach -->
+  <rect x="0" y="160" width="400" height="20" fill="url(#beachGradient)"/>
+  
+  <!-- Galle Fort -->
+  <rect x="80" y="120" width="60" height="40" fill="url(#fortGradient)"/>
+  <rect x="90" y="110" width="10" height="10" fill="url(#fortGradient)"/>
+  <rect x="120" y="110" width="10" height="10" fill="url(#fortGradient)"/>
+  
+  <!-- Lighthouse -->
+  <rect x="160" y="100" width="8" height="60" fill="#FFFFFF"/>
+  <rect x="158" y="95" width="12" height="8" fill="#FF0000"/>
+  <rect x="156" y="100" width="16" height="3" fill="#FF0000"/>
+  
+  <!-- Palm trees -->
+  <rect x="45" y="140" width="4" height="25" fill="#8B4513"/>
+  <ellipse cx="47" cy="135" rx="12" ry="8" fill="#228B22"/>
+  <ellipse cx="51" cy="130" rx="8" ry="5" fill="#228B22"/>
+  <ellipse cx="43" cy="130" rx="8" ry="5" fill="#228B22"/>
+  
+  <rect x="250" y="145" width="4" height="20" fill="#8B4513"/>
+  <ellipse cx="252" cy="140" rx="10" ry="6" fill="#228B22"/>
+  <ellipse cx="256" cy="136" rx="6" ry="4" fill="#228B22"/>
+  <ellipse cx="248" cy="136" rx="6" ry="4" fill="#228B22"/>
+  
+  <rect x="330" y="150" width="4" height="15" fill="#8B4513"/>
+  <ellipse cx="332" cy="145" rx="8" ry="5" fill="#228B22"/>
+  <ellipse cx="335" cy="142" rx="5" ry="3" fill="#228B22"/>
+  <ellipse cx="329" cy="142" rx="5" ry="3" fill="#228B22"/>
+  
+  <!-- Traditional fishing boats -->
+  <ellipse cx="200" cy="220" rx="25" ry="8" fill="#8B4513"/>
+  <rect x="198" y="215" width="4" height="15" fill="#8B4513"/>
+  <polygon points="190,228 210,228 205,235" fill="#8B4513"/>
+  
+  <ellipse cx="300" cy="240" rx="20" ry="6" fill="#654321"/>
+  <rect x="298" y="235" width="4" height="12" fill="#654321"/>
+  <polygon points="292,246 308,246 304,252" fill="#654321"/>
+  
+  <!-- Waves -->
+  <path d="M 0 200 Q 50 195 100 200 Q 150 205 200 200 Q 250 195 300 200 Q 350 205 400 200 L 400 220 L 0 220 Z" fill="#87CEEB" opacity="0.5"/>
+  <path d="M 0 210 Q 40 205 80 210 Q 120 215 160 210 Q 200 205 240 210 Q 280 215 320 210 Q 360 205 400 210 L 400 230 L 0 230 Z" fill="#87CEEB" opacity="0.3"/>
+  
+  <!-- Seagulls -->
+  <path d="M 150 80 Q 155 75 160 80" stroke="#666" stroke-width="2" fill="none"/>
+  <path d="M 280 90 Q 285 85 290 90" stroke="#666" stroke-width="2" fill="none"/>
+  
+  <!-- Province label -->
+  <text x="200" y="280" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#14213d">Southern Province</text>
+  <text x="200" y="295" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#666">Galle • Matara • Hambantota</text>
+</svg>

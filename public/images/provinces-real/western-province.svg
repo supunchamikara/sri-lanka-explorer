@@ -1,0 +1,67 @@
+<svg width="400" height="300" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background gradient mimicking sky -->
+  <defs>
+    <linearGradient id="skyGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#87CEEB;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#E0F6FF;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="cityGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#4A5568;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2D3748;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="waterGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#4299E1;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2B6CB0;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Sky -->
+  <rect width="400" height="150" fill="url(#skyGradient)"/>
+  
+  <!-- Water (Beira Lake/Ocean) -->
+  <rect x="0" y="200" width="400" height="100" fill="url(#waterGradient)"/>
+  
+  <!-- Colombo Skyline -->
+  <rect x="50" y="120" width="25" height="80" fill="url(#cityGradient)"/>
+  <rect x="80" y="100" width="20" height="100" fill="url(#cityGradient)"/>
+  <rect x="105" y="110" width="30" height="90" fill="url(#cityGradient)"/>
+  <rect x="140" y="90" width="25" height="110" fill="url(#cityGradient)"/>
+  <rect x="170" y="105" width="35" height="95" fill="url(#cityGradient)"/>
+  <rect x="210" y="85" width="28" height="115" fill="url(#cityGradient)"/>
+  <rect x="245" y="95" width="22" height="105" fill="url(#cityGradient)"/>
+  <rect x="275" y="110" width="30" height="90" fill="url(#cityGradient)"/>
+  <rect x="310" y="100" width="25" height="100" fill="url(#cityGradient)"/>
+  <rect x="340" y="120" width="20" height="80" fill="url(#cityGradient)"/>
+  
+  <!-- Building details (windows) -->
+  <rect x="85" y="110" width="3" height="3" fill="#FCA311"/>
+  <rect x="90" y="110" width="3" height="3" fill="#FCA311"/>
+  <rect x="85" y="120" width="3" height="3" fill="#FCA311"/>
+  <rect x="90" y="120" width="3" height="3" fill="#FCA311"/>
+  
+  <rect x="115" y="125" width="4" height="4" fill="#FCA311"/>
+  <rect x="125" y="125" width="4" height="4" fill="#FCA311"/>
+  <rect x="115" y="135" width="4" height="4" fill="#FCA311"/>
+  <rect x="125" y="135" width="4" height="4" fill="#FCA311"/>
+  
+  <!-- WTC Tower highlight -->
+  <rect x="210" y="95" width="5" height="5" fill="#FCA311"/>
+  <rect x="220" y="95" width="5" height="5" fill="#FCA311"/>
+  <rect x="230" y="95" width="5" height="5" fill="#FCA311"/>
+  
+  <!-- Reflection in water -->
+  <rect x="50" y="210" width="25" height="40" fill="#2D3748" opacity="0.3"/>
+  <rect x="80" y="210" width="20" height="50" fill="#2D3748" opacity="0.3"/>
+  <rect x="105" y="210" width="30" height="45" fill="#2D3748" opacity="0.3"/>
+  <rect x="140" y="210" width="25" height="55" fill="#2D3748" opacity="0.3"/>
+  <rect x="170" y="210" width="35" height="48" fill="#2D3748" opacity="0.3"/>
+  <rect x="210" y="210" width="28" height="58" fill="#2D3748" opacity="0.3"/>
+  
+  <!-- Clouds -->
+  <ellipse cx="100" cy="40" rx="25" ry="12" fill="white" opacity="0.8"/>
+  <ellipse cx="300" cy="60" rx="35" ry="18" fill="white" opacity="0.7"/>
+  
+  <!-- Province label -->
+  <text x="200" y="280" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#14213d">Western Province</text>
+  <text x="200" y="295" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#666">Colombo • Gampaha • Kalutara</text>
+</svg>

@@ -1,0 +1,81 @@
+<svg width="400" height="300" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background for northern landscape -->
+  <defs>
+    <linearGradient id="northernSky" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#87CEEB;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#E6F3FF;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="fortGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#D2691E;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#8B4513;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="templeGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFD700;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FFA500;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Sky -->
+  <rect width="400" height="150" fill="url(#northernSky)"/>
+  
+  <!-- Ground -->
+  <rect x="0" y="150" width="400" height="150" fill="#DEB887"/>
+  
+  <!-- Jaffna Fort -->
+  <rect x="50" y="100" width="80" height="50" fill="url(#fortGradient)"/>
+  <rect x="60" y="90" width="15" height="15" fill="url(#fortGradient)"/>
+  <rect x="90" y="90" width="15" height="15" fill="url(#fortGradient)"/>
+  <rect x="110" y="90" width="15" height="15" fill="url(#fortGradient)"/>
+  
+  <!-- Fort details -->
+  <rect x="70" y="110" width="3" height="6" fill="#654321"/>
+  <rect x="85" y="110" width="3" height="6" fill="#654321"/>
+  <rect x="100" y="110" width="3" height="6" fill="#654321"/>
+  <rect x="115" y="110" width="3" height="6" fill="#654321"/>
+  
+  <!-- Nallur Kovil (Hindu Temple) -->
+  <rect x="250" y="120" width="50" height="30" fill="url(#templeGradient)"/>
+  <polygon points="250,120 275,100 300,120" fill="#FF6347"/>
+  <rect x="265" y="105" width="20" height="15" fill="url(#templeGradient)"/>
+  <polygon points="265,105 275,95 285,105" fill="#FF6347"/>
+  
+  <!-- Temple spire details -->
+  <rect x="272" y="98" width="6" height="7" fill="#FCA311"/>
+  <circle cx="275" r="3" cy="95" fill="#FF0000"/>
+  
+  <!-- Palmyra palms -->
+  <rect x="150" y="140" width="6" height="30" fill="#8B4513"/>
+  <circle cx="153" cy="135" r="15" fill="#228B22"/>
+  <rect x="148" y="125" width="10" height="3" fill="#228B22"/>
+  <rect x="147" y="130" width="12" height="2" fill="#228B22"/>
+  <rect x="149" y="138" width="8" height="2" fill="#228B22"/>
+  
+  <rect x="320" y="145" width="5" height="25" fill="#8B4513"/>
+  <circle cx="322" cy="140" r="12" fill="#228B22"/>
+  <rect x="318" y="132" width="8" height="2" fill="#228B22"/>
+  <rect x="317" y="136" width="10" height="2" fill="#228B22"/>
+  <rect x="319" y="142" width="6" height="2" fill="#228B22"/>
+  
+  <!-- Traditional houses -->
+  <rect x="180" y="170" width="30" height="20" fill="#CD853F"/>
+  <polygon points="180,170 195,160 210,170" fill="#8B4513"/>
+  <rect x="185" y="175" width="6" height="8" fill="#654321"/>
+  <rect x="198" y="175" width="4" height="4" fill="#FCA311"/>
+  
+  <!-- Lagoon/water body -->
+  <ellipse cx="100" cy="220" rx="60" ry="15" fill="#4169E1"/>
+  <ellipse cx="300" cy="240" rx="40" ry="10" fill="#4169E1"/>
+  
+  <!-- Fishing boats -->
+  <ellipse cx="80" cy="225" rx="15" ry="4" fill="#8B4513"/>
+  <rect x="78" y="220" width="4" height="8" fill="#8B4513"/>
+  
+  <!-- Dry zone vegetation -->
+  <circle cx="30" cy="180" r="8" fill="#9ACD32"/>
+  <circle cx="370" cy="190" r="6" fill="#9ACD32"/>
+  <circle cx="200" cy="200" r="5" fill="#9ACD32"/>
+  
+  <!-- Province label -->
+  <text x="200" y="280" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#14213d">Northern Province</text>
+  <text x="200" y="295" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#666">Jaffna • Kilinochchi • Mannar • Mullaitivu • Vavuniya</text>
+</svg>
