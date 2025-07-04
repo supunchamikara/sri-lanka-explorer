@@ -14,10 +14,10 @@ YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
 # Configuration
-APP_NAME="sri-lanka-explorer"
+APP_NAME="tapro.podieka.com"
 APP_DIR="/var/www/$APP_NAME"
-DOMAIN="yourdomain.com"  # Change this to your actual domain
-EMAIL="your-email@domain.com"  # Change this to your email
+DOMAIN="tapro.podieka.com"  # Change this to your actual domain
+EMAIL="info@podieka.com"  # Change this to your email
 
 echo -e "${YELLOW}📋 Configuration:${NC}"
 echo -e "App Name: $APP_NAME"
