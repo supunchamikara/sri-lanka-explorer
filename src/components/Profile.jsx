@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useToast } from "../hooks/useToast";
 import Toast from "./Toast";
+import { API_BASE_URL } from "../utils/api";
 
 const Profile = () => {
   const { user, isAuthenticated, updateUser } = useAuth();
@@ -37,7 +38,7 @@ const Profile = () => {
       try {
         setExperiencesLoading(true);
         const token = localStorage.getItem("token");
-        const response = await fetch("http://localhost:5000/api/experiences", {
+        const response = await fetch(`${API_BASE_URL}/experiences`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -106,7 +107,7 @@ const Profile = () => {
         updateData.newPassword = formData.newPassword;
       }
 
-      const response = await fetch("http://localhost:5000/api/auth/profile", {
+      const response = await fetch(`${API_BASE_URL}/auth/profile`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

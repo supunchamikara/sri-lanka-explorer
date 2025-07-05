@@ -3,14 +3,8 @@ const API_BASE_URL =
     ? "/api" // Use relative URLs in production (same server)
     : import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
-// Debug logging
-console.log("API Configuration:", {
-  PROD: import.meta.env.PROD,
-  NODE_ENV: import.meta.env.NODE_ENV,
-  MODE: import.meta.env.MODE,
-  VITE_API_URL: import.meta.env.VITE_API_URL,
-  API_BASE_URL: API_BASE_URL,
-});
+// Export API_BASE_URL for use in other files
+export { API_BASE_URL };
 
 // Helper function to get auth headers
 const getAuthHeaders = () => {
