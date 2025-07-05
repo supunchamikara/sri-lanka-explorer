@@ -67,45 +67,6 @@ app.use("/api/auth", authRoutes);
 app.use("/api/upload", uploadRoutes);
 app.use("/api", seoRoutes);
 
-// Serve static files from React build (for production)
-if (process.env.NODE_ENV === "production") {
-  // Serve static files from the dist directory
-  app.use(express.static(path.join(__dirname, "../dist")));
-
-  // Handle React Router (return index.html for all non-API routes)
-  app.get("*", (req, res) => {
-    // Don't serve index.html for API routes
-    if (req.path.startsWith("/api/")) {
-      return res.status(404).json({
-        status: "error",
-        message: "API route not found",
-      });
-    }
-
-    res.sendFile(path.join(__dirname, "../dist/index.html"));
-  });
-} else {
-  // Development/API-only mode - show welcome message
-  app.get("/", (req, res) => {
-    res.json({
-      status: "success",
-      message: "🇱🇰 Welcome to Sri Lanka Explorer API!",
-      version: "1.0.0",
-      description: "Backend API for Sri Lanka travel experiences",
-      endpoints: {
-        health: "/api/health",
-        experiences: "/api/experiences",
-        auth: "/api/auth",
-        upload: "/api/upload",
-        testConnection: "/api/test-connection",
-      },
-      documentation: "All API endpoints are prefixed with /api/",
-      frontend: "Deploy your React frontend and connect it to this API",
-      timestamp: new Date().toISOString(),
-    });
-  });
-}
-
 // Health check endpoint
 app.get("/api/health", (req, res) => {
   res.json({
@@ -145,6 +106,37 @@ app.get("/api/test-connection", async (req, res) => {
     });
   }
 });
+
+// Serve static files from React build (for production)
+if (process.env.NODE_ENV === "production") {
+  // Serve static files from the dist directory
+  app.use(express.static(path.join(__dirname, "../dist")));
+
+  // Handle React Router (return index.html for all non-API routes)
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "../dist/index.html"));
+  });
+} else {
+  // Development/API-only mode - show welcome message
+  app.get("/", (req, res) => {
+    res.json({
+      status: "success",
+      message: "🇱🇰 Welcome to Sri Lanka Explorer API!",
+      version: "1.0.0",
+      description: "Backend API for Sri Lanka travel experiences",
+      endpoints: {
+        health: "/api/health",
+        experiences: "/api/experiences",
+        auth: "/api/auth",
+        upload: "/api/upload",
+        testConnection: "/api/test-connection",
+      },
+      documentation: "All API endpoints are prefixed with /api/",
+      frontend: "Deploy your React frontend and connect it to this API",
+      timestamp: new Date().toISOString(),
+    });
+  });
+}
 
 // Error handling middleware
 app.use((err, req, res, next) => {
