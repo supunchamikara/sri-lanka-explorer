@@ -1,0 +1,42 @@
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Sri Lanka Explorer - Travel themed favicon -->
+  
+  <!-- Background gradient circle -->
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#1e3a8a;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#14213d;stop-opacity:1" />
+    </radialGradient>
+    <linearGradient id="island" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#22c55e;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#15803d;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <circle cx="16" cy="16" r="15" fill="url(#bg)" stroke="#fca311" stroke-width="2"/>
+  
+  <!-- Sri Lanka island outline (teardrop shape) -->
+  <path d="M16 8C12 8 9 11 9 15C9 18 11 20 13 22C14 23 15 24 16 24C17 24 18 23 19 22C21 20 23 18 23 15C23 11 20 8 16 8Z" fill="url(#island)" opacity="0.9"/>
+  
+  <!-- Buddhist stupa/dagoba -->
+  <circle cx="15" cy="16" r="2" fill="#fca311"/>
+  <path d="M15 14L14 12L16 12Z" fill="#fca311"/>
+  <line x1="15" y1="12" x2="15" y2="11" stroke="#fca311" stroke-width="0.5"/>
+  
+  <!-- Palm tree -->
+  <line x1="19" y1="20" x2="19" y2="15" stroke="#8B4513" stroke-width="1"/>
+  <path d="M19 15C18 14 17 14 18 15C19 15 20 14 21 15" fill="#22c55e"/>
+  <path d="M19 15C18.5 13.5 19 14 19 15C19 14 19.5 13.5 20 15" fill="#22c55e"/>
+  
+  <!-- Ocean waves -->
+  <path d="M8 24C9 23 10 23 11 24" stroke="#3b82f6" stroke-width="1" fill="none" opacity="0.7"/>
+  <path d="M21 25C22 24 23 24 24 25" stroke="#3b82f6" stroke-width="1" fill="none" opacity="0.7"/>
+  
+  <!-- Sun/star -->
+  <circle cx="11" cy="11" r="1" fill="#fbbf24" opacity="0.8"/>
+  <path d="M11 10L11 12M10 11L12 11M10.3 10.3L11.7 11.7M10.3 11.7L11.7 10.3" stroke="#fbbf24" stroke-width="0.3" opacity="0.8"/>
+  
+  <!-- Mountain peak -->
+  <path d="M20 13L21 11L22 13" fill="#6b7280" opacity="0.7"/>
+  
+</svg>

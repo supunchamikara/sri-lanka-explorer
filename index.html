@@ -2,9 +2,96 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    
+    <!-- Favicons and App Icons -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon.svg" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/icon-192.svg" />
+    <link rel="mask-icon" href="/favicon.svg" color="#14213d" />
+    
+    <!-- Web App Manifest -->
+    <link rel="manifest" href="/manifest.json" />
+    
+    <!-- Theme colors for mobile browsers -->
+    <meta name="theme-color" content="#fca311" />
+    <meta name="msapplication-TileColor" content="#14213d" />
+    <meta name="msapplication-config" content="/browserconfig.xml" />
+    
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React</title>
+    
+    <!-- Basic SEO Meta Tags -->
+    <title>Sri Lanka Explorer - Discover Amazing Travel Experiences</title>
+    <meta name="description" content="Explore Sri Lanka's hidden gems, authentic experiences, and breathtaking destinations. Share your travel stories and discover the best places to visit in Sri Lanka." />
+    <meta name="keywords" content="Sri Lanka travel, tourism, destinations, experiences, provinces, districts, cities, travel guide, Ceylon, adventure, culture, beaches, mountains, temples" />
+    <meta name="author" content="Sri Lanka Explorer" />
+    <meta name="robots" content="index, follow" />
+    <meta name="language" content="English" />
+    <meta name="revisit-after" content="7 days" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://srilanka-explorer.com/" />
+    <meta property="og:title" content="Sri Lanka Explorer - Discover Amazing Travel Experiences" />
+    <meta property="og:description" content="Explore Sri Lanka's hidden gems, authentic experiences, and breathtaking destinations. Share your travel stories and discover the best places to visit in Sri Lanka." />
+    <meta property="og:image" content="https://srilanka-explorer.com/og-image.jpg" />
+    <meta property="og:site_name" content="Sri Lanka Explorer" />
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://srilanka-explorer.com/" />
+    <meta property="twitter:title" content="Sri Lanka Explorer - Discover Amazing Travel Experiences" />
+    <meta property="twitter:description" content="Explore Sri Lanka's hidden gems, authentic experiences, and breathtaking destinations. Share your travel stories and discover the best places to visit in Sri Lanka." />
+    <meta property="twitter:image" content="https://srilanka-explorer.com/og-image.jpg" />
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://srilanka-explorer.com/" />
+    
+    <!-- Preconnect to Google Fonts for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "TravelAgency",
+      "name": "Sri Lanka Explorer",
+      "description": "Discover amazing travel experiences in Sri Lanka",
+      "url": "https://srilanka-explorer.com",
+      "logo": "https://srilanka-explorer.com/logo.png",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "Customer Service",
+        "availableLanguage": ["English", "Sinhala", "Tamil"]
+      },
+      "areaServed": {
+        "@type": "Country",
+        "name": "Sri Lanka"
+      },
+      "serviceType": "Travel Information and Experience Sharing"
+    }
+    </script>
+    
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'GA_MEASUREMENT_ID');
+    </script>
+    
+    <!-- Google Search Console Verification -->
+    <meta name="google-site-verification" content="YOUR_GOOGLE_SEARCH_CONSOLE_VERIFICATION_CODE" />
+    
+    <!-- Bing Webmaster Tools -->
+    <meta name="msvalidate.01" content="YOUR_BING_VERIFICATION_CODE" />
+    
+    <!-- Performance hints -->
+    <link rel="dns-prefetch" href="//www.google-analytics.com">
+    <link rel="dns-prefetch" href="//fonts.googleapis.com">
+    <link rel="dns-prefetch" href="//fonts.gstatic.com">
   </head>
   <body>
     <div id="root"></div>

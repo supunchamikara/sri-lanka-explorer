@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+Disallow: /auth
+Disallow: /add-experience
+Disallow: /edit-experience
+Disallow: /profile
+
+# Sitemap
+Sitemap: https://srilanka-explorer.com/sitemap.xml
+
+# Crawl-delay
+Crawl-delay: 1

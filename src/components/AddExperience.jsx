@@ -86,26 +86,48 @@ const AddExperience = () => {
     }
   };
 
-  const handleImageUpload = (e) => {
+  const handleImageUpload = async (e) => {
     const files = Array.from(e.target.files);
-    const imageUrls = [];
 
-    files.forEach((file) => {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        imageUrls.push(event.target.result);
-        if (imageUrls.length === files.length) {
-          setFormData({
-            ...formData,
-            images: [...formData.images, ...imageUrls],
-          });
-        }
-      };
-      reader.readAsDataURL(file);
-    });
+    if (files.length === 0) return;
+
+    try {
+      setLoading(true);
+
+      // Upload files to server
+      const uploadedUrls = await api.upload.images(files);
+
+      // Add uploaded URLs to form data
+      setFormData({
+        ...formData,
+        images: [...formData.images, ...uploadedUrls],
+      });
+
+      showSuccess(`${files.length} image(s) uploaded successfully!`);
+    } catch (error) {
+      console.error("Upload error:", error);
+      showError(`Failed to upload images: ${error.message}`);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const removeImage = (index) => {
+  const removeImage = async (index) => {
+    const imageUrl = formData.images[index];
+
+    try {
+      // Extract filename from URL for deletion
+      if (imageUrl && imageUrl.includes("/uploads/experiences/")) {
+        const filename = imageUrl.split("/uploads/experiences/").pop();
+        if (filename) {
+          await api.upload.deleteImage(filename);
+        }
+      }
+    } catch (error) {
+      console.error("Error deleting image:", error);
+      // Continue with removal from UI even if server deletion fails
+    }
+
     const updatedImages = formData.images.filter((_, i) => i !== index);
     setFormData({ ...formData, images: updatedImages });
   };
@@ -311,25 +333,51 @@ const AddExperience = () => {
                 />
                 <label
                   htmlFor="image-upload"
-                  className="cursor-pointer inline-flex items-center px-4 py-2 bg-accent-gold text-navy-blue rounded-md hover:bg-navy-blue hover:text-white transition-colors"
+                  className={`cursor-pointer inline-flex items-center px-4 py-2 rounded-md transition-colors ${
+                    loading
+                      ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                      : "bg-accent-gold text-navy-blue hover:bg-navy-blue hover:text-white"
+                  }`}
                 >
-                  <svg
-                    className="w-5 h-5 mr-2"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                    />
-                  </svg>
-                  Choose Images
+                  {loading ? (
+                    <>
+                      <svg
+                        className="w-5 h-5 mr-2 animate-spin"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                        />
+                      </svg>
+                      Uploading...
+                    </>
+                  ) : (
+                    <>
+                      <svg
+                        className="w-5 h-5 mr-2"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                        />
+                      </svg>
+                      Choose Images
+                    </>
+                  )}
                 </label>
                 <p className="text-gray-500 text-sm mt-2">
-                  Upload multiple images to showcase your experience
+                  Upload multiple images (max 5MB each) to showcase your
+                  experience
                 </p>
               </div>
 

@@ -1,6 +1,7 @@
 import React from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { sriLankaData } from "../data/sriLankaData";
+import { SEOHelmet } from "../context/SEOContext";
 
 const Districts = () => {
   const { provinceId } = useParams();
@@ -25,6 +26,40 @@ const Districts = () => {
 
   return (
     <div className="min-h-screen bg-light-gray pt-20 pb-8">
+      <SEOHelmet
+        title={`${province.name} Districts - Travel Guide Sri Lanka`}
+        description={`Explore districts in ${
+          province.name
+        }. Discover cities, attractions, and travel experiences in ${province.districts
+          .map((d) => d.name)
+          .join(", ")}. Complete travel guide for ${province.name}.`}
+        keywords={`${province.name}, ${province.districts
+          .map((d) => d.name)
+          .join(
+            ", "
+          )}, Sri Lanka districts, travel guide, destinations, cities`}
+        canonicalUrl={`/province/${provinceId}`}
+        structuredData={{
+          "@context": "https://schema.org",
+          "@type": "TouristDestination",
+          name: `${province.name} Districts`,
+          description: `Explore districts in ${province.name}`,
+          containedInPlace: {
+            "@type": "AdministrativeArea",
+            name: province.name,
+            containedInPlace: {
+              "@type": "Country",
+              name: "Sri Lanka",
+            },
+          },
+          hasPart: province.districts.map((district) => ({
+            "@type": "AdministrativeArea",
+            name: district.name,
+            identifier: district.id,
+          })),
+        }}
+      />
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-8">
           <button

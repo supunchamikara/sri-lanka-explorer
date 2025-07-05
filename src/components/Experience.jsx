@@ -3,6 +3,7 @@ import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { api } from "../utils/api";
 import { useToast } from "../hooks/useToast";
 import { useAuth } from "../context/AuthContext";
+import { SEOHelmet } from "../context/SEOContext";
 import Toast from "./Toast";
 
 const Experience = () => {
@@ -140,6 +141,54 @@ const Experience = () => {
 
   return (
     <div className="min-h-screen bg-light-gray pt-20 pb-8">
+      <SEOHelmet
+        title={
+          searchParams.get("search")
+            ? `Search Results for "${searchParams.get(
+                "search"
+              )}" - Sri Lanka Experiences`
+            : "Travel Experiences in Sri Lanka - Real Stories & Reviews"
+        }
+        description={
+          searchParams.get("search")
+            ? `Find travel experiences related to "${searchParams.get(
+                "search"
+              )}" in Sri Lanka. Discover real stories, reviews, and recommendations from fellow travelers.`
+            : "Browse authentic travel experiences shared by travelers across Sri Lanka. Discover hidden gems, local insights, and travel tips from real people who've explored the island."
+        }
+        keywords={`Sri Lanka experiences, travel stories, ${
+          searchParams.get("search") || "travel reviews"
+        }, travel recommendations, authentic experiences, local insights, traveler stories`}
+        canonicalUrl="/experience"
+        structuredData={{
+          "@context": "https://schema.org",
+          "@type": "ItemList",
+          name: "Sri Lanka Travel Experiences",
+          description:
+            "Collection of authentic travel experiences in Sri Lanka",
+          numberOfItems: filteredExperiences.length,
+          itemListElement: filteredExperiences
+            .slice(0, 10)
+            .map((experience, index) => ({
+              "@type": "ListItem",
+              position: index + 1,
+              item: {
+                "@type": "TouristAttraction",
+                name: experience.title,
+                description: experience.description,
+                location: {
+                  "@type": "Place",
+                  name: `${experience.cityName}, ${experience.districtName}, ${experience.provinceName}`,
+                  containedInPlace: {
+                    "@type": "Country",
+                    name: "Sri Lanka",
+                  },
+                },
+              },
+            })),
+        }}
+      />
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-navy-blue mb-4">

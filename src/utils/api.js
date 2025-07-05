@@ -149,4 +149,61 @@ export const api = {
       }
     },
   },
+
+  // Upload API calls
+  upload: {
+    // Upload multiple images
+    images: async (files) => {
+      try {
+        const formData = new FormData();
+
+        // Add each file to the form data
+        files.forEach((file) => {
+          formData.append("images", file);
+        });
+
+        const token = localStorage.getItem("token");
+        const response = await fetch(`${API_BASE_URL}/upload`, {
+          method: "POST",
+          headers: {
+            ...(token && { Authorization: `Bearer ${token}` }),
+            // Don't set Content-Type for FormData, let browser set it with boundary
+          },
+          body: formData,
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.message || "Failed to upload images");
+        }
+
+        return data.data.urls; // Return array of image URLs
+      } catch (error) {
+        console.error("Error uploading images:", error);
+        throw error;
+      }
+    },
+
+    // Delete an image by filename
+    deleteImage: async (filename) => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/upload/${filename}`, {
+          method: "DELETE",
+          headers: getAuthHeaders(),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.message || "Failed to delete image");
+        }
+
+        return data;
+      } catch (error) {
+        console.error("Error deleting image:", error);
+        throw error;
+      }
+    },
+  },
 };

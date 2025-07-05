@@ -170,7 +170,7 @@ const Navigation = () => {
               to="/"
               className="text-accent-gold text-xl font-bold hover:text-white transition-colors duration-200"
             >
-              Sri Lanka Explorer
+              Tapro Sri Lanka
             </Link>
           </div>
 

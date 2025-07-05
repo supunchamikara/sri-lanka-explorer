@@ -1,0 +1,29 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- High resolution version for app icons -->
+  
+  <!-- Background circle -->
+  <circle cx="256" cy="256" r="240" fill="#14213d" stroke="#fca311" stroke-width="32"/>
+  
+  <!-- Island shape (simplified Sri Lanka) -->
+  <path d="M128 288C128 288 160 192 192 160C224 128 256 128 288 144C320 160 352 192 384 240C384 272 368 304 352 320C320 352 288 368 256 368C224 368 192 352 160 336C128 320 128 288 128 288Z" fill="#2d5016" opacity="0.8"/>
+  
+  <!-- Palm tree -->
+  <line x1="288" y1="320" x2="288" y2="224" stroke="#8b4513" stroke-width="24" stroke-linecap="round"/>
+  <path d="M288 224L256 192L288 208L320 192" fill="#228b22" stroke="#228b22" stroke-width="8"/>
+  <path d="M288 224L272 176L288 208L304 176" fill="#228b22" stroke="#228b22" stroke-width="8"/>
+  <path d="M288 224L240 208L288 208L336 208" fill="#228b22" stroke="#228b22" stroke-width="8"/>
+  
+  <!-- Waves around the island -->
+  <path d="M96 352C112 336 128 336 144 352C160 368 176 368 192 352" stroke="#0066cc" stroke-width="16" fill="none" opacity="0.6"/>
+  <path d="M320 384C336 368 352 368 368 384C384 400 400 400 416 384" stroke="#0066cc" stroke-width="16" fill="none" opacity="0.6"/>
+  <path d="M80 256C96 240 112 240 128 256C144 272 160 272 176 256" stroke="#0066cc" stroke-width="16" fill="none" opacity="0.6"/>
+  
+  <!-- Temple/stupa silhouette -->
+  <circle cx="224" cy="272" r="24" fill="#fca311" opacity="0.9"/>
+  <path d="M224 248L216 224L232 224Z" fill="#fca311" opacity="0.9"/>
+  
+  <!-- Stars for tropical feel -->
+  <circle cx="160" cy="128" r="8" fill="#fca311" opacity="0.7"/>
+  <circle cx="352" cy="144" r="8" fill="#fca311" opacity="0.7"/>
+  <circle cx="400" cy="304" r="8" fill="#fca311" opacity="0.7"/>
+</svg>

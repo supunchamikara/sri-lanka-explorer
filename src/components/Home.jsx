@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { api } from "../utils/api";
 import { useAuth } from "../context/AuthContext";
 import { useToast } from "../hooks/useToast";
+import { SEOHelmet } from "../context/SEOContext";
 import Toast from "./Toast";
 
 const Home = () => {
@@ -90,6 +91,28 @@ const Home = () => {
 
   return (
     <div className="min-h-screen bg-light-gray">
+      <SEOHelmet
+        title="Discover Amazing Travel Experiences in Sri Lanka"
+        description="Explore Sri Lanka's 9 provinces, 25 districts, and countless cities. Share your travel experiences and discover hidden gems in the Pearl of the Indian Ocean. Find the best places to visit, local experiences, and travel tips."
+        keywords="Sri Lanka travel, Ceylon tourism, Sri Lanka destinations, travel experiences, provinces of Sri Lanka, districts of Sri Lanka, Colombo, Kandy, Galle, Sigiriya, cultural triangle, beaches, temples, wildlife, tea plantations"
+        canonicalUrl="/"
+        ogType="website"
+        structuredData={{
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          name: "Sri Lanka Explorer",
+          url: "https://srilanka-explorer.com",
+          potentialAction: {
+            "@type": "SearchAction",
+            target:
+              "https://srilanka-explorer.com/search?q={search_term_string}",
+            "query-input": "required name=search_term_string",
+          },
+          description:
+            "Discover amazing travel experiences across Sri Lanka's provinces, districts and cities",
+        }}
+      />
+
       {/* Hero Section */}
       <div className="relative h-screen flex items-center justify-center overflow-hidden">
         {/* Background Images */}

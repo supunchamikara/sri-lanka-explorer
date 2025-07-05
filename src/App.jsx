@@ -1,6 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
+import { SEOProvider } from "./context/SEOContext";
 import Navigation from "./components/Navigation";
 import Footer from "./components/Footer";
 import Home from "./components/Home";
@@ -17,57 +18,59 @@ import "./App.css";
 
 function App() {
   return (
-    <AuthProvider>
-      <Router>
-        <div className="min-h-screen flex flex-col bg-light-gray">
-          <Navigation />
+    <SEOProvider>
+      <AuthProvider>
+        <Router>
+          <div className="min-h-screen flex flex-col bg-light-gray">
+            <Navigation />
 
-          <main className="flex-grow">
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/provinces" element={<Provinces />} />
-              <Route path="/province/:provinceId" element={<Districts />} />
-              <Route
-                path="/province/:provinceId/district/:districtId"
-                element={<Cities />}
-              />
-              <Route
-                path="/province/:provinceId/district/:districtId/city/:cityName"
-                element={<CityExperiences />}
-              />
-              <Route path="/auth" element={<Auth />} />
-              <Route path="/experience" element={<Experience />} />
-              <Route
-                path="/add-experience"
-                element={
-                  <ProtectedRoute>
-                    <AddExperience />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/edit-experience/:id"
-                element={
-                  <ProtectedRoute>
-                    <AddExperience />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/profile"
-                element={
-                  <ProtectedRoute>
-                    <Profile />
-                  </ProtectedRoute>
-                }
-              />
-            </Routes>
-          </main>
+            <main className="flex-grow">
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/provinces" element={<Provinces />} />
+                <Route path="/province/:provinceId" element={<Districts />} />
+                <Route
+                  path="/province/:provinceId/district/:districtId"
+                  element={<Cities />}
+                />
+                <Route
+                  path="/province/:provinceId/district/:districtId/city/:cityName"
+                  element={<CityExperiences />}
+                />
+                <Route path="/auth" element={<Auth />} />
+                <Route path="/experience" element={<Experience />} />
+                <Route
+                  path="/add-experience"
+                  element={
+                    <ProtectedRoute>
+                      <AddExperience />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/edit-experience/:id"
+                  element={
+                    <ProtectedRoute>
+                      <AddExperience />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/profile"
+                  element={
+                    <ProtectedRoute>
+                      <Profile />
+                    </ProtectedRoute>
+                  }
+                />
+              </Routes>
+            </main>
 
-          <Footer />
-        </div>
-      </Router>
-    </AuthProvider>
+            <Footer />
+          </div>
+        </Router>
+      </AuthProvider>
+    </SEOProvider>
   );
 }
 

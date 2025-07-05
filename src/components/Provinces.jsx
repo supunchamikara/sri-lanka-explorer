@@ -1,10 +1,33 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { sriLankaData } from "../data/sriLankaData";
+import { SEOHelmet } from "../context/SEOContext";
 
 const Provinces = () => {
   return (
     <div className="min-h-screen bg-light-gray pt-20 pb-8">
+      <SEOHelmet
+        title="9 Provinces of Sri Lanka - Complete Travel Guide"
+        description="Explore all 9 provinces of Sri Lanka including Western, Central, Southern, Northern, Eastern, North Western, North Central, Uva, and Sabaragamuwa. Discover districts, cities, and travel destinations."
+        keywords="Sri Lanka provinces, 9 provinces Sri Lanka, Western Province, Central Province, Southern Province, Northern Province, Eastern Province, North Western Province, North Central Province, Uva Province, Sabaragamuwa Province"
+        canonicalUrl="/provinces"
+        structuredData={{
+          "@context": "https://schema.org",
+          "@type": "TouristDestination",
+          name: "Provinces of Sri Lanka",
+          description: "Explore the 9 beautiful provinces of Sri Lanka",
+          containedInPlace: {
+            "@type": "Country",
+            name: "Sri Lanka",
+          },
+          hasPart: sriLankaData.map((province) => ({
+            "@type": "AdministrativeArea",
+            name: province.name,
+            identifier: province.id,
+          })),
+        }}
+      />
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-navy-blue mb-4">

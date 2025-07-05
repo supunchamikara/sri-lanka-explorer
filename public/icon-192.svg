@@ -1,0 +1,42 @@
+<svg width="192" height="192" viewBox="0 0 192 192" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Sri Lanka Explorer - High resolution travel icon -->
+  
+  <!-- Background gradient circle -->
+  <defs>
+    <radialGradient id="bg192" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#1e3a8a;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#14213d;stop-opacity:1" />
+    </radialGradient>
+    <linearGradient id="island192" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#22c55e;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#15803d;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <circle cx="96" cy="96" r="90" fill="url(#bg192)" stroke="#fca311" stroke-width="12"/>
+  
+  <!-- Sri Lanka island outline (teardrop shape) -->
+  <path d="M96 48C72 48 54 66 54 90C54 108 66 120 78 132C84 138 90 144 96 144C102 144 108 138 114 132C126 120 138 108 138 90C138 66 120 48 96 48Z" fill="url(#island192)" opacity="0.9"/>
+  
+  <!-- Buddhist stupa/dagoba -->
+  <circle cx="90" cy="96" r="12" fill="#fca311"/>
+  <path d="M90 84L84 72L96 72Z" fill="#fca311"/>
+  <line x1="90" y1="72" x2="90" y2="66" stroke="#fca311" stroke-width="3"/>
+  
+  <!-- Palm tree -->
+  <line x1="114" y1="120" x2="114" y2="90" stroke="#8B4513" stroke-width="6"/>
+  <path d="M114 90C108 84 102 84 108 90C114 90 120 84 126 90" fill="#22c55e"/>
+  <path d="M114 90C111 81 114 84 114 90C114 84 117 81 120 90" fill="#22c55e"/>
+  
+  <!-- Ocean waves -->
+  <path d="M48 144C54 138 60 138 66 144" stroke="#3b82f6" stroke-width="6" fill="none" opacity="0.7"/>
+  <path d="M126 150C132 144 138 144 144 150" stroke="#3b82f6" stroke-width="6" fill="none" opacity="0.7"/>
+  
+  <!-- Sun/star -->
+  <circle cx="66" cy="66" r="6" fill="#fbbf24" opacity="0.8"/>
+  <path d="M66 60L66 72M60 66L72 66M61.8 61.8L70.2 70.2M61.8 70.2L70.2 61.8" stroke="#fbbf24" stroke-width="2" opacity="0.8"/>
+  
+  <!-- Mountain peak -->
+  <path d="M120 78L126 66L132 78" fill="#6b7280" opacity="0.7"/>
+  
+</svg>
