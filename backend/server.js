@@ -2,23 +2,42 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const helmet = require("helmet");
+const multer = require("multer");
+const path = require("path");
 require("dotenv").config();
 
 const app = express();
 
 // Middleware
-app.use(helmet());
+app.use(
+  helmet({
+    crossOriginResourcePolicy: { policy: "cross-origin" },
+  })
+);
 app.use(
   cors({
-    origin:
-      process.env.CORS_ORIGIN ||
-      process.env.FRONTEND_URL ||
+    origin: [
       "http://localhost:5173",
+      "http://localhost:5174",
+      process.env.CORS_ORIGIN,
+      process.env.FRONTEND_URL,
+    ].filter(Boolean),
     credentials: true,
   })
 );
-app.use(express.json({ limit: "10mb" })); // Increase limit for base64 images
-app.use(express.urlencoded({ extended: true, limit: "10mb" }));
+app.use(express.json({ limit: "1mb" })); // Reduced from 10mb since no more Base64 images
+
+// Serve static files from uploads directory with CORS headers
+app.use(
+  "/uploads",
+  (req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Cross-Origin-Resource-Policy", "cross-origin");
+    next();
+  },
+  express.static(path.join(__dirname, "uploads"))
+);
+app.use(express.urlencoded({ extended: true, limit: "1mb" })); // Reduced from 10mb since no more Base64 images
 
 // MongoDB Connection
 const connectDB = async () => {
@@ -35,10 +54,16 @@ const connectDB = async () => {
 // Import routes
 const experienceRoutes = require("./routes/experiences");
 const authRoutes = require("./routes/auth");
+const uploadRoutes = require("./routes/upload");
+const seoRoutes = require("./routes/seo");
 
 // Routes
 app.use("/api/experiences", experienceRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/upload", uploadRoutes);
+app.use("/api", seoRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/upload", uploadRoutes);
 
 // Health check endpoint
 app.get("/api/health", (req, res) => {

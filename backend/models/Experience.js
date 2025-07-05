@@ -41,7 +41,7 @@ const experienceSchema = new mongoose.Schema({
   },
   images: [
     {
-      type: String, // Base64 encoded images or URLs
+      type: String, // Image URLs pointing to uploaded files
     },
   ],
   createdAt: {

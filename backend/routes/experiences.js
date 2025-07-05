@@ -1,5 +1,7 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
+const fs = require("fs");
+const path = require("path");
 const User = require("../models/User");
 const Experience = require("../models/Experience");
 
@@ -174,6 +176,32 @@ router.delete("/:id", authenticateToken, async (req, res) => {
       return res.status(403).json({
         status: "error",
         message: "You can only delete your own experiences",
+      });
+    }
+
+    // Delete associated image files before deleting the experience
+    if (experience.images && experience.images.length > 0) {
+      experience.images.forEach((imageUrl) => {
+        try {
+          // Extract filename from URL
+          if (imageUrl.includes("/uploads/experiences/")) {
+            const filename = imageUrl.split("/uploads/experiences/").pop();
+            const filePath = path.join(
+              __dirname,
+              "../uploads/experiences",
+              filename
+            );
+
+            // Delete file if it exists
+            if (fs.existsSync(filePath)) {
+              fs.unlinkSync(filePath);
+              console.log(`🗑️ Deleted image file: ${filename}`);
+            }
+          }
+        } catch (fileError) {
+          console.error(`Error deleting image file: ${fileError.message}`);
+          // Continue with experience deletion even if file deletion fails
+        }
       });
     }
 
