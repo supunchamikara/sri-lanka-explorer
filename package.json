@@ -8,7 +8,7 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "heroku-postbuild": "npm install --legacy-peer-deps && cd backend && npm install",
+    "heroku-postbuild": "npm install --legacy-peer-deps && npm run build && cd backend && npm install",
     "start": "cd backend && npm start"
   },
   "engines": {

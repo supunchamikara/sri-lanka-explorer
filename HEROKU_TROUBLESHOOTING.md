@@ -1,8 +1,51 @@
 # 🚨 Heroku Deployment Troubleshooting Guide
 
-## Your App Status: DEPLOYED but with Application Error
+## ✅ CURRENT STATUS: Almost Fixed!
 
 **App URL:** https://tapro-3c3bc3ed4b88.herokuapp.com/
+**Issue:** MongoDB Atlas IP Whitelist - Heroku IPs not allowed to connect
+
+## 🎯 IMMEDIATE FIX REQUIRED
+
+### MongoDB Atlas Network Access Issue
+
+**Problem:** Your MongoDB Atlas cluster is blocking Heroku's servers from connecting.
+
+**Error:** `Could not connect to any servers in your MongoDB Atlas cluster. One common reason is that you're trying to access the database from an IP that isn't whitelisted.`
+
+### **SOLUTION - Update MongoDB Atlas:**
+
+1. **Go to MongoDB Atlas:** https://cloud.mongodb.com/
+2. **Login** to your account
+3. **Click "Network Access"** in left sidebar
+4. **Click "Add IP Address"**
+5. **Click "Allow Access from Anywhere"** (or add `0.0.0.0/0`)
+6. **Click "Confirm"**
+
+### **After MongoDB Atlas Fix:**
+
+Run this test script:
+
+```bash
+./test-heroku-app.sh
+```
+
+Or test manually:
+
+```bash
+curl https://tapro-3c3bc3ed4b88.herokuapp.com/api/health
+```
+
+**Expected Response:**
+
+```json
+{
+  "status": "OK",
+  "message": "Sri Lanka Explorer API is running",
+  "timestamp": "2025-07-06T...",
+  "database": "Connected"
+}
+```
 
 ## Immediate Action Required
 
