@@ -8,6 +8,7 @@ const Navigation = () => {
   const navigate = useNavigate();
   const { isAuthenticated, user, logout } = useAuth();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [searchSuggestions, setSearchSuggestions] = useState([]);
@@ -16,11 +17,22 @@ const Navigation = () => {
   const [experiences, setExperiences] = useState([]);
   const dropdownRef = useRef(null);
   const searchRef = useRef(null);
+  const mobileMenuRef = useRef(null);
 
   const handleLogout = () => {
     logout();
     navigate("/");
     setIsDropdownOpen(false);
+    setIsMobileMenuOpen(false);
+  };
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+    setIsDropdownOpen(false);
+  };
+
+  const closeMobileMenu = () => {
+    setIsMobileMenuOpen(false);
   };
 
   const handleSearch = (e) => {
@@ -153,6 +165,12 @@ const Navigation = () => {
       if (searchRef.current && !searchRef.current.contains(event.target)) {
         setShowSuggestions(false);
       }
+      if (
+        mobileMenuRef.current &&
+        !mobileMenuRef.current.contains(event.target)
+      ) {
+        setIsMobileMenuOpen(false);
+      }
     };
 
     document.addEventListener("mousedown", handleClickOutside);
@@ -165,17 +183,19 @@ const Navigation = () => {
     <nav className="bg-navy-blue shadow-lg fixed w-full top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
+          {/* Logo */}
           <div className="flex items-center">
             <Link
               to="/"
+              onClick={closeMobileMenu}
               className="text-accent-gold text-xl font-bold hover:text-white transition-colors duration-200"
             >
               Tapro Sri Lanka
             </Link>
           </div>
 
-          {/* Search Bar */}
-          <div className="hidden md:flex flex-1 max-w-lg mx-8">
+          {/* Desktop Search Bar */}
+          <div className="hidden lg:flex flex-1 max-w-lg mx-8">
             <form onSubmit={handleSearch} className="relative w-full">
               <div className="relative" ref={searchRef}>
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -287,28 +307,8 @@ const Navigation = () => {
             </form>
           </div>
 
-          <div className="flex items-center space-x-2 md:space-x-4">
-            {/* Mobile Search Icon */}
-            <Link
-              to="/experience"
-              className="md:hidden p-2 text-white hover:text-accent-gold transition-colors duration-200"
-              title="Search Experiences"
-            >
-              <svg
-                className="h-5 w-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                />
-              </svg>
-            </Link>
-
+          {/* Desktop Navigation Links */}
+          <div className="hidden lg:flex items-center space-x-4">
             <Link
               to="/"
               className={`px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${
@@ -347,7 +347,7 @@ const Navigation = () => {
               <div className="relative" ref={dropdownRef}>
                 <button
                   onClick={toggleDropdown}
-                  className={`px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 flex items-center space-x-0.5 ${
+                  className={`px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 flex items-center space-x-1 ${
                     location.pathname.startsWith("/add-experience") ||
                     location.pathname.startsWith("/edit-experience") ||
                     location.pathname === "/profile"
@@ -420,6 +420,176 @@ const Navigation = () => {
               </Link>
             )}
           </div>
+
+          {/* Mobile menu button */}
+          <div className="lg:hidden flex items-center">
+            <button
+              onClick={toggleMobileMenu}
+              className="inline-flex items-center justify-center p-2 rounded-md text-white hover:text-accent-gold hover:bg-navy-blue focus:outline-none focus:ring-2 focus:ring-inset focus:ring-accent-gold transition-colors duration-200"
+              aria-expanded="false"
+            >
+              <span className="sr-only">Open main menu</span>
+              {!isMobileMenuOpen ? (
+                <svg
+                  className="block h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  aria-hidden="true"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4 6h16M4 12h16M4 18h16"
+                  />
+                </svg>
+              ) : (
+                <svg
+                  className="block h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  aria-hidden="true"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              )}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile menu */}
+      <div
+        ref={mobileMenuRef}
+        className={`lg:hidden transition-all duration-300 ease-in-out ${
+          isMobileMenuOpen
+            ? "max-h-screen opacity-100"
+            : "max-h-0 opacity-0 overflow-hidden"
+        }`}
+      >
+        <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-navy-blue border-t border-gray-700">
+          {/* Mobile Search Bar */}
+          <div className="px-3 pb-3">
+            <form onSubmit={handleSearch} className="relative w-full">
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <svg
+                    className="h-5 w-5 text-gray-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                    />
+                  </svg>
+                </div>
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={handleSearchChange}
+                  onKeyDown={handleKeyDown}
+                  placeholder="Search experiences..."
+                  className="block w-full pl-10 pr-3 py-2 border border-transparent rounded-md leading-5 bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-accent-gold focus:border-accent-gold"
+                  autoComplete="off"
+                />
+              </div>
+            </form>
+          </div>
+
+          {/* Mobile Navigation Links */}
+          <Link
+            to="/"
+            onClick={closeMobileMenu}
+            className={`block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200 ${
+              location.pathname === "/"
+                ? "bg-accent-gold text-navy-blue"
+                : "text-white hover:text-accent-gold hover:bg-gray-700"
+            }`}
+          >
+            Home
+          </Link>
+
+          <Link
+            to="/provinces"
+            onClick={closeMobileMenu}
+            className={`block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200 ${
+              location.pathname === "/provinces" ||
+              location.pathname.startsWith("/province")
+                ? "bg-accent-gold text-navy-blue"
+                : "text-white hover:text-accent-gold hover:bg-gray-700"
+            }`}
+          >
+            Provinces
+          </Link>
+
+          <Link
+            to="/experience"
+            onClick={closeMobileMenu}
+            className={`block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200 ${
+              location.pathname === "/experience"
+                ? "bg-accent-gold text-navy-blue"
+                : "text-white hover:text-accent-gold hover:bg-gray-700"
+            }`}
+          >
+            Experiences
+          </Link>
+
+          {isAuthenticated ? (
+            <>
+              <Link
+                to="/add-experience"
+                onClick={closeMobileMenu}
+                className={`block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200 ${
+                  location.pathname.startsWith("/add-experience") ||
+                  location.pathname.startsWith("/edit-experience")
+                    ? "bg-accent-gold text-navy-blue"
+                    : "text-white hover:text-accent-gold hover:bg-gray-700"
+                }`}
+              >
+                Add Experience
+              </Link>
+              <Link
+                to="/profile"
+                onClick={closeMobileMenu}
+                className={`block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200 ${
+                  location.pathname === "/profile"
+                    ? "bg-accent-gold text-navy-blue"
+                    : "text-white hover:text-accent-gold hover:bg-gray-700"
+                }`}
+              >
+                Profile ({user?.name})
+              </Link>
+              <button
+                onClick={handleLogout}
+                className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-white hover:text-accent-gold hover:bg-gray-700 transition-colors duration-200"
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            <Link
+              to="/auth"
+              onClick={closeMobileMenu}
+              className={`block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200 ${
+                location.pathname === "/auth"
+                  ? "bg-accent-gold text-navy-blue"
+                  : "text-white hover:text-accent-gold hover:bg-gray-700"
+              }`}
+            >
+              Login / Register
+            </Link>
+          )}
         </div>
       </div>
     </nav>
