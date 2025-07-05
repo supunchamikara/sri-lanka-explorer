@@ -19,6 +19,10 @@ app.use(
     origin: [
       "http://localhost:5173",
       "http://localhost:5174",
+      "https://srilanka-explorer.netlify.app",
+      "https://sri-lanka-explorer.vercel.app",
+      "https://tapro-web.herokuapp.com",
+      "https://tapro-web-*.herokuapp.com",
       process.env.CORS_ORIGIN,
       process.env.FRONTEND_URL,
     ].filter(Boolean),
