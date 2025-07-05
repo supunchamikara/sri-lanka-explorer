@@ -3,11 +3,13 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import { sriLankaData } from "../data/sriLankaData";
 import { api } from "../utils/api";
 import { useToast } from "../hooks/useToast";
+import { useAuth } from "../context/AuthContext";
 import Toast from "./Toast";
 
 const CityExperiences = () => {
   const { provinceId, districtId, cityName } = useParams();
   const navigate = useNavigate();
+  const { isAuthenticated, user } = useAuth();
   const [experiences, setExperiences] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedImages, setSelectedImages] = useState({}); // Track selected image for each experience
@@ -45,15 +47,6 @@ const CityExperiences = () => {
         setFilteredExperiences(cityExperiences); // Initialize filtered experiences
       } catch (error) {
         console.error("Error loading city experiences:", error);
-        // If authentication error, redirect to login
-        if (
-          error.message &&
-          error.message.includes("Authentication required")
-        ) {
-          showError("Please log in to view experiences");
-          navigate("/auth");
-          return;
-        }
         showError("Failed to load experiences");
       } finally {
         setLoading(false);
@@ -90,6 +83,11 @@ const CityExperiences = () => {
 
   const getSelectedImageIndex = (experienceId) => {
     return selectedImages[experienceId] || 0;
+  };
+
+  // Check if current user owns the experience
+  const isOwner = (experience) => {
+    return isAuthenticated && user && experience.createdBy === user._id;
   };
 
   // Search functionality
@@ -332,25 +330,49 @@ const CityExperiences = () => {
               Discover travel experiences and stories from {decodedCityName}.
             </p>
 
-            <Link
-              to="/add-experience"
-              className="inline-flex items-center px-6 py-3 bg-accent-gold text-navy-blue font-semibold rounded-lg hover:bg-navy-blue hover:text-white transition-all duration-300 shadow-md hover:shadow-lg"
-            >
-              <svg
-                className="w-5 h-5 mr-2"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
+            {isAuthenticated && (
+              <Link
+                to="/add-experience"
+                className="inline-flex items-center px-6 py-3 bg-accent-gold text-navy-blue font-semibold rounded-lg hover:bg-navy-blue hover:text-white transition-all duration-300 shadow-md hover:shadow-lg"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 4v16m8-8H4"
-                />
-              </svg>
-              Share Your Experience in {decodedCityName}
-            </Link>
+                <svg
+                  className="w-5 h-5 mr-2"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 4v16m8-8H4"
+                  />
+                </svg>
+                Share Your Experience in {decodedCityName}
+              </Link>
+            )}
+
+            {!isAuthenticated && (
+              <Link
+                to="/auth"
+                className="inline-flex items-center px-6 py-3 bg-accent-gold text-navy-blue font-semibold rounded-lg hover:bg-navy-blue hover:text-white transition-all duration-300 shadow-md hover:shadow-lg"
+              >
+                <svg
+                  className="w-5 h-5 mr-2"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"
+                  />
+                </svg>
+                Login to Share Your Experience
+              </Link>
+            )}
           </div>
 
           {/* Search Bar */}
@@ -579,12 +601,19 @@ const CityExperiences = () => {
               >
                 Clear Search
               </button>
-            ) : (
+            ) : isAuthenticated ? (
               <Link
                 to="/add-experience"
                 className="inline-flex items-center px-6 py-3 bg-accent-gold text-navy-blue font-semibold rounded-lg hover:bg-navy-blue hover:text-white transition-all duration-300"
               >
                 Share Your First Experience
+              </Link>
+            ) : (
+              <Link
+                to="/auth"
+                className="inline-flex items-center px-6 py-3 bg-accent-gold text-navy-blue font-semibold rounded-lg hover:bg-navy-blue hover:text-white transition-all duration-300"
+              >
+                Login to Share Experience
               </Link>
             )}
           </div>
@@ -704,56 +733,62 @@ const CityExperiences = () => {
                                 d="M8 7V3a4 4 0 118 0v4m-4 8l-6-6 2.5-2.5a1.5 1.5 0 112.121 2.121L9 15"
                               />
                             </svg>
-                            {new Date(
-                              experience.createdAt
-                            ).toLocaleDateString()}
+                            {experience.createdAt
+                              ? new Date(
+                                  experience.createdAt
+                                ).toLocaleDateString()
+                              : "Date not available"}
                           </div>
                         </div>
 
-                        <div className="flex space-x-2">
-                          <Link
-                            to={`/edit-experience/${
-                              experience._id || experience.id
-                            }`}
-                            className="p-2 text-accent-gold hover:text-navy-blue transition-colors"
-                            title="Edit Experience"
-                          >
-                            <svg
-                              className="w-5 h-5"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
+                        {isAuthenticated && isOwner(experience) && (
+                          <div className="flex space-x-2">
+                            <Link
+                              to={`/edit-experience/${
+                                experience._id || experience.id
+                              }`}
+                              className="p-2 text-accent-gold hover:text-navy-blue transition-colors"
+                              title="Edit Experience"
                             >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                              />
-                            </svg>
-                          </Link>
-                          <button
-                            onClick={() =>
-                              deleteExperience(experience._id || experience.id)
-                            }
-                            className="p-2 text-red-500 hover:text-red-700 transition-colors"
-                            title="Delete Experience"
-                          >
-                            <svg
-                              className="w-5 h-5"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
+                              <svg
+                                className="w-5 h-5"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                                />
+                              </svg>
+                            </Link>
+                            <button
+                              onClick={() =>
+                                deleteExperience(
+                                  experience._id || experience.id
+                                )
+                              }
+                              className="p-2 text-red-500 hover:text-red-700 transition-colors"
+                              title="Delete Experience"
                             >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                              />
-                            </svg>
-                          </button>
-                        </div>
+                              <svg
+                                className="w-5 h-5"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                                />
+                              </svg>
+                            </button>
+                          </div>
+                        )}
                       </div>
 
                       <p className="text-gray-700 leading-relaxed mb-4">

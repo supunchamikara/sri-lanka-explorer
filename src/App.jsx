@@ -33,21 +33,10 @@ function App() {
               />
               <Route
                 path="/province/:provinceId/district/:districtId/city/:cityName"
-                element={
-                  <ProtectedRoute>
-                    <CityExperiences />
-                  </ProtectedRoute>
-                }
+                element={<CityExperiences />}
               />
               <Route path="/auth" element={<Auth />} />
-              <Route
-                path="/experience"
-                element={
-                  <ProtectedRoute>
-                    <Experience />
-                  </ProtectedRoute>
-                }
-              />
+              <Route path="/experience" element={<Experience />} />
               <Route
                 path="/add-experience"
                 element={

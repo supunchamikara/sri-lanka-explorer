@@ -45,14 +45,13 @@ export const api = {
         if (filters.cityName) params.append("cityName", filters.cityName);
 
         const response = await fetch(`${API_BASE_URL}/experiences?${params}`, {
-          headers: getAuthHeaders(),
+          headers: {
+            "Content-Type": "application/json",
+          },
         });
         const data = await response.json();
 
         if (!response.ok) {
-          if (response.status === 401) {
-            throw new Error("Authentication required - please log in");
-          }
           throw new Error(data.message || "Failed to fetch experiences");
         }
 

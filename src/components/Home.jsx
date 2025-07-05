@@ -30,17 +30,15 @@ const Home = () => {
     return () => clearInterval(interval);
   }, [heroImages.length]);
 
-  // Load recent experiences
+  // Load recent experiences for all users
   useEffect(() => {
     const loadRecentExperiences = async () => {
       try {
         setLoading(true);
-        if (isAuthenticated) {
-          const data = await api.experiences.getAll();
-          // Get the last 8 experiences
-          const recent = data.slice(0, 8);
-          setRecentExperiences(recent);
-        }
+        const data = await api.experiences.getAll();
+        // Get the last 8 experiences
+        const recent = data.slice(0, 8);
+        setRecentExperiences(recent);
       } catch (error) {
         console.error("Error loading recent experiences:", error);
         if (
@@ -58,7 +56,7 @@ const Home = () => {
     };
 
     loadRecentExperiences();
-  }, [isAuthenticated, showError]);
+  }, [showError]);
 
   const handleExploreClick = () => {
     if (isAuthenticated) {
@@ -69,7 +67,10 @@ const Home = () => {
   };
 
   const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
+    if (!dateString) return "Date not available";
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) return "Date not available";
+    return date.toLocaleDateString("en-US", {
       year: "numeric",
       month: "short",
       day: "numeric",
@@ -171,35 +172,39 @@ const Home = () => {
       </div>
 
       {/* Recent Experiences Section */}
-      {isAuthenticated && (
-        <div className="py-16 bg-light-gray">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
-              <h2 className="text-4xl font-bold text-navy-blue mb-4 animate-fade-in-up">
-                Recent Adventures
-              </h2>
-              <p className="text-xl text-gray-600 animate-fade-in-up animation-delay-200">
-                Discover the latest experiences shared by our community
-              </p>
+      <div className="py-16 bg-light-gray">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold text-navy-blue mb-4 animate-fade-in-up">
+              Recent Adventures
+            </h2>
+            <p className="text-xl text-gray-600 animate-fade-in-up animation-delay-200">
+              Discover the latest experiences shared by our community
+            </p>
+          </div>
+
+          {loading ? (
+            <div className="flex justify-center items-center h-64">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-accent-gold"></div>
             </div>
+          ) : recentExperiences.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {recentExperiences.map((experience, index) => {
+                const experienceId = experience._id || experience.id;
+                const selectedImageIndex = getSelectedImageIndex(experienceId);
+                const hasMultipleImages =
+                  experience.images && experience.images.length > 1;
 
-            {loading ? (
-              <div className="flex justify-center items-center h-64">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-accent-gold"></div>
-              </div>
-            ) : recentExperiences.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {recentExperiences.map((experience, index) => {
-                  const experienceId = experience._id || experience.id;
-                  const selectedImageIndex =
-                    getSelectedImageIndex(experienceId);
-                  const hasMultipleImages =
-                    experience.images && experience.images.length > 1;
-
-                  return (
+                return (
+                  <Link
+                    key={experienceId}
+                    to={`/province/${experience.provinceId}/district/${
+                      experience.districtId
+                    }/city/${encodeURIComponent(experience.cityName)}`}
+                    className="block"
+                  >
                     <div
-                      key={experienceId}
-                      className={`bg-white rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition-all duration-300 hover:shadow-2xl animate-fade-in-up`}
+                      className={`bg-white rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition-all duration-300 hover:shadow-2xl animate-fade-in-up cursor-pointer`}
                       style={{ animationDelay: `${index * 100}ms` }}
                     >
                       {experience.images && experience.images.length > 0 && (
@@ -220,9 +225,11 @@ const Home = () => {
                                 {experience.images.map((image, imgIndex) => (
                                   <button
                                     key={imgIndex}
-                                    onClick={() =>
-                                      handleImageSelect(experienceId, imgIndex)
-                                    }
+                                    onClick={(e) => {
+                                      e.preventDefault();
+                                      e.stopPropagation();
+                                      handleImageSelect(experienceId, imgIndex);
+                                    }}
                                     className={`w-8 h-8 rounded overflow-hidden transition-all duration-200 ${
                                       imgIndex === selectedImageIndex
                                         ? "ring-2 ring-accent-gold scale-110"
@@ -271,40 +278,51 @@ const Home = () => {
                         )}
                       </div>
                     </div>
-                  );
-                })}
-              </div>
-            ) : (
-              <div className="text-center py-12">
-                <div className="text-6xl mb-4">🌟</div>
-                <h3 className="text-xl font-semibold text-navy-blue mb-2">
-                  No experiences yet
-                </h3>
-                <p className="text-gray-600 mb-6">
-                  Be the first to share your Sri Lankan adventure!
-                </p>
+                  </Link>
+                );
+              })}
+            </div>
+          ) : (
+            <div className="text-center py-12">
+              <div className="text-6xl mb-4">🌟</div>
+              <h3 className="text-xl font-semibold text-navy-blue mb-2">
+                No experiences yet
+              </h3>
+              <p className="text-gray-600 mb-6">
+                {isAuthenticated
+                  ? "Be the first to share your Sri Lankan adventure!"
+                  : "Join our community to share your Sri Lankan adventures!"}
+              </p>
+              {isAuthenticated ? (
                 <Link
                   to="/add-experience"
                   className="bg-accent-gold text-navy-blue px-6 py-3 rounded-lg font-semibold hover:bg-yellow-500 transform hover:scale-105 transition-all duration-300"
                 >
                   Share Your Experience
                 </Link>
-              </div>
-            )}
-
-            {recentExperiences.length > 0 && (
-              <div className="text-center mt-12">
+              ) : (
                 <Link
-                  to="/experience"
-                  className="bg-navy-blue text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-blue-900 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
+                  to="/auth"
+                  className="bg-accent-gold text-navy-blue px-6 py-3 rounded-lg font-semibold hover:bg-yellow-500 transform hover:scale-105 transition-all duration-300"
                 >
-                  View All Experiences
+                  Join Community
                 </Link>
-              </div>
-            )}
-          </div>
+              )}
+            </div>
+          )}
+
+          {recentExperiences.length > 0 && (
+            <div className="text-center mt-12">
+              <Link
+                to="/experience"
+                className="bg-navy-blue text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-blue-900 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
+              >
+                View All Experiences
+              </Link>
+            </div>
+          )}
         </div>
-      )}
+      </div>
 
       {/* Call to Action for Non-authenticated Users */}
       {!isAuthenticated && (

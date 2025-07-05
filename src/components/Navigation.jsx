@@ -133,18 +133,16 @@ const Navigation = () => {
   // Load experiences for search suggestions
   useEffect(() => {
     const loadExperiences = async () => {
-      if (isAuthenticated) {
-        try {
-          const data = await api.experiences.getAll();
-          setExperiences(data);
-        } catch (error) {
-          console.error("Error loading experiences for search:", error);
-        }
+      try {
+        const data = await api.experiences.getAll();
+        setExperiences(data);
+      } catch (error) {
+        console.error("Error loading experiences for search:", error);
       }
     };
 
     loadExperiences();
-  }, [isAuthenticated]);
+  }, []);
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -334,12 +332,22 @@ const Navigation = () => {
               Provinces
             </Link>
 
+            <Link
+              to="/experience"
+              className={`px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${
+                location.pathname === "/experience"
+                  ? "bg-accent-gold text-navy-blue"
+                  : "text-white hover:text-accent-gold"
+              }`}
+            >
+              Experiences
+            </Link>
+
             {isAuthenticated ? (
               <div className="relative" ref={dropdownRef}>
                 <button
                   onClick={toggleDropdown}
                   className={`px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 flex items-center space-x-0.5 ${
-                    location.pathname === "/experience" ||
                     location.pathname.startsWith("/add-experience") ||
                     location.pathname.startsWith("/edit-experience") ||
                     location.pathname === "/profile"
@@ -368,17 +376,16 @@ const Navigation = () => {
                 {isDropdownOpen && (
                   <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 border border-gray-200">
                     <Link
-                      to="/experience"
+                      to="/add-experience"
                       onClick={() => setIsDropdownOpen(false)}
                       className={`block px-4 py-2 text-sm transition-colors duration-200 ${
-                        location.pathname === "/experience" ||
                         location.pathname.startsWith("/add-experience") ||
                         location.pathname.startsWith("/edit-experience")
                           ? "bg-accent-gold text-navy-blue"
                           : "text-navy-blue hover:bg-light-gray"
                       }`}
                     >
-                      Experience
+                      Add Experience
                     </Link>
                     <Link
                       to="/profile"

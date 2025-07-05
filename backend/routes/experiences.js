@@ -41,8 +41,8 @@ const authenticateToken = async (req, res, next) => {
   }
 };
 
-// GET /api/experiences - Get all experiences (requires authentication)
-router.get("/", authenticateToken, async (req, res) => {
+// GET /api/experiences - Get all experiences (public access)
+router.get("/", async (req, res) => {
   try {
     const { provinceId, districtId, cityName } = req.query;
 
@@ -67,7 +67,7 @@ router.get("/", authenticateToken, async (req, res) => {
 });
 
 // GET /api/experiences/:id - Get single experience (requires authentication)
-router.get("/:id", authenticateToken, async (req, res) => {
+router.get("/:id", async (req, res) => {
   try {
     const experience = await Experience.findById(req.params.id);
 
@@ -118,18 +118,30 @@ router.post("/", authenticateToken, async (req, res) => {
 // PUT /api/experiences/:id - Update experience
 router.put("/:id", authenticateToken, async (req, res) => {
   try {
-    const experience = await Experience.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true, runValidators: true }
-    );
+    // First find the experience to check ownership
+    const existingExperience = await Experience.findById(req.params.id);
 
-    if (!experience) {
+    if (!existingExperience) {
       return res.status(404).json({
         status: "error",
         message: "Experience not found",
       });
     }
+
+    // Check if the user owns this experience
+    if (existingExperience.createdBy.toString() !== req.user._id.toString()) {
+      return res.status(403).json({
+        status: "error",
+        message: "You can only edit your own experiences",
+      });
+    }
+
+    // Update the experience
+    const experience = await Experience.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true, runValidators: true }
+    );
 
     res.json({
       status: "success",
@@ -147,7 +159,8 @@ router.put("/:id", authenticateToken, async (req, res) => {
 // DELETE /api/experiences/:id - Delete experience
 router.delete("/:id", authenticateToken, async (req, res) => {
   try {
-    const experience = await Experience.findByIdAndDelete(req.params.id);
+    // First find the experience to check ownership
+    const experience = await Experience.findById(req.params.id);
 
     if (!experience) {
       return res.status(404).json({
@@ -155,6 +168,17 @@ router.delete("/:id", authenticateToken, async (req, res) => {
         message: "Experience not found",
       });
     }
+
+    // Check if the user owns this experience
+    if (experience.createdBy.toString() !== req.user._id.toString()) {
+      return res.status(403).json({
+        status: "error",
+        message: "You can only delete your own experiences",
+      });
+    }
+
+    // Delete the experience
+    await Experience.findByIdAndDelete(req.params.id);
 
     res.json({
       status: "success",
