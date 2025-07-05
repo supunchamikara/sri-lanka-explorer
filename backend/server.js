@@ -69,6 +69,26 @@ app.use("/api", seoRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/upload", uploadRoutes);
 
+// Root welcome route
+app.get("/", (req, res) => {
+  res.json({
+    status: "success",
+    message: "🇱🇰 Welcome to Sri Lanka Explorer API!",
+    version: "1.0.0",
+    description: "Backend API for Sri Lanka travel experiences",
+    endpoints: {
+      health: "/api/health",
+      experiences: "/api/experiences",
+      auth: "/api/auth",
+      upload: "/api/upload",
+      testConnection: "/api/test-connection",
+    },
+    documentation: "All API endpoints are prefixed with /api/",
+    frontend: "Deploy your React frontend and connect it to this API",
+    timestamp: new Date().toISOString(),
+  });
+});
+
 // Health check endpoint
 app.get("/api/health", (req, res) => {
   res.json({
