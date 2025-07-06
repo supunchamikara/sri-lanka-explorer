@@ -94,8 +94,66 @@ const AddExperience = () => {
     try {
       setLoading(true);
 
-      // Upload files to server
-      const uploadedUrls = await api.upload.images(files);
+      // Get ImageKit authentication from backend
+      const token = localStorage.getItem("token");
+      const authResponse = await fetch(
+        `${
+          import.meta.env.PROD ? "/api" : "http://localhost:5000/api"
+        }/upload/imagekit-auth`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({}),
+        }
+      );
+
+      if (!authResponse.ok) {
+        throw new Error("Failed to get ImageKit authentication");
+      }
+
+      const authData = await authResponse.json();
+      const { token: authToken, expire, signature, publicKey } = authData.data;
+
+      // Upload files to ImageKit
+      const uploadPromises = files.map(async (file) => {
+        const formData = new FormData();
+
+        // Create a unique filename
+        const timestamp = Date.now();
+        const randomId = Math.round(Math.random() * 1e9);
+        const fileExtension = file.name.split(".").pop();
+        const fileName = `experience-${timestamp}-${randomId}.${fileExtension}`;
+
+        formData.append("file", file);
+        formData.append("fileName", fileName);
+        formData.append("folder", "/experiences/");
+        formData.append("publicKey", publicKey);
+        formData.append("signature", signature);
+        formData.append("expire", expire);
+        formData.append("token", authToken);
+
+        const response = await fetch(
+          "https://upload.imagekit.io/api/v1/files/upload",
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
+
+        if (!response.ok) {
+          const errorData = await response.text();
+          console.error("ImageKit upload error:", errorData);
+          throw new Error(`Failed to upload ${file.name}`);
+        }
+
+        const data = await response.json();
+        return data.url;
+      });
+
+      const uploadedUrls = await Promise.all(uploadPromises);
 
       // Add uploaded URLs to form data
       setFormData({
@@ -116,13 +174,12 @@ const AddExperience = () => {
     const imageUrl = formData.images[index];
 
     try {
-      // Extract filename from URL for deletion
-      if (imageUrl && imageUrl.includes("/uploads/experiences/")) {
-        const filename = imageUrl.split("/uploads/experiences/").pop();
-        if (filename) {
-          await api.upload.deleteImage(filename);
-        }
-      }
+      // For ImageKit images, we can try to delete them, but it's not critical if it fails
+      // ImageKit deletion requires authentication and proper API setup
+      console.log("Removing image from UI:", imageUrl);
+
+      // Note: In production, you might want to implement ImageKit deletion
+      // using the file ID if you store it during upload
     } catch (error) {
       console.error("Error deleting image:", error);
       // Continue with removal from UI even if server deletion fails

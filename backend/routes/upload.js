@@ -3,11 +3,20 @@ const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
 const jwt = require("jsonwebtoken");
+const crypto = require("crypto");
 const User = require("../models/User");
 
 const router = express.Router();
 
 const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
+
+// ImageKit configuration
+const IMAGEKIT_PUBLIC_KEY =
+  process.env.IMAGEKIT_PUBLIC_KEY || "public_MKLeTf6L2Bb0vX4M7N8kZbDk6C4=";
+const IMAGEKIT_PRIVATE_KEY =
+  process.env.IMAGEKIT_PRIVATE_KEY || "private_Q4Gc4LlrBY2vy6t8V4PfPP8T6PQ=";
+const IMAGEKIT_URL_ENDPOINT =
+  process.env.IMAGEKIT_URL_ENDPOINT || "https://ik.imagekit.io/rxy27pb0a/";
 
 // Authentication middleware
 const authenticateToken = async (req, res, next) => {
@@ -84,6 +93,37 @@ const upload = multer({
     fileSize: 5 * 1024 * 1024, // 5MB limit per file
   },
   fileFilter: fileFilter,
+});
+
+// POST /api/upload/imagekit-auth - Get authentication parameters for ImageKit client-side upload
+router.post("/imagekit-auth", authenticateToken, (req, res) => {
+  try {
+    // Generate authentication parameters for ImageKit
+    const token = req.body.token || crypto.randomUUID();
+    const expire = Math.floor(Date.now() / 1000) + 2400; // 40 minutes from now
+
+    // Create signature for ImageKit authentication
+    const signature = crypto
+      .createHmac("sha1", IMAGEKIT_PRIVATE_KEY)
+      .update(token + expire)
+      .digest("hex");
+
+    res.json({
+      status: "success",
+      data: {
+        token,
+        expire,
+        signature,
+        publicKey: IMAGEKIT_PUBLIC_KEY,
+      },
+    });
+  } catch (error) {
+    console.error("ImageKit auth error:", error);
+    res.status(500).json({
+      status: "error",
+      message: "Failed to generate authentication parameters",
+    });
+  }
 });
 
 // POST /api/upload - Upload multiple images
