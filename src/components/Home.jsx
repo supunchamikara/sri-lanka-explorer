@@ -5,6 +5,7 @@ import { useAuth } from "../context/AuthContext";
 import { useToast } from "../hooks/useToast";
 import { SEOHelmet } from "../context/SEOContext";
 import Toast from "./Toast";
+import RichTextDisplay from "./RichTextDisplay";
 
 const Home = () => {
   const [recentExperiences, setRecentExperiences] = useState([]);
@@ -283,9 +284,13 @@ const Home = () => {
                         <h3 className="font-bold text-lg text-navy-blue mb-2 line-clamp-2">
                           {experience.title}
                         </h3>
-                        <p className="text-gray-600 text-sm mb-3 line-clamp-3">
-                          {experience.description}
-                        </p>
+                        <div className="text-gray-600 text-sm mb-3">
+                          <RichTextDisplay
+                            content={experience.description}
+                            preview={true}
+                            maxLength={120}
+                          />
+                        </div>
                         <div className="flex items-center justify-between text-sm">
                           <span className="text-accent-gold font-semibold">
                             {experience.cityName}
