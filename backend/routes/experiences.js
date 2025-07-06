@@ -181,17 +181,25 @@ router.delete("/:id", authenticateToken, async (req, res) => {
 
     // Delete associated image files before deleting the experience
     if (experience.images && experience.images.length > 0) {
+      console.log(
+        `🗑️ Deleting ${experience.images.length} images for experience ${req.params.id}`
+      );
+
       for (const imageUrl of experience.images) {
         try {
+          console.log(`🗑️ Processing image: ${imageUrl}`);
+
           // Check if image is hosted on ImageKit
           if (imageUrl.includes("ik.imagekit.io")) {
             // Extract filename from ImageKit URL
             const urlParts = imageUrl.split("/");
             const filename = urlParts[urlParts.length - 1];
 
+            console.log(`🗑️ Attempting to delete ImageKit image: ${filename}`);
+
             // Delete from ImageKit using Management API
             try {
-              // First, find the file by searching
+              // First, try to find the file by searching with just the filename
               const listResponse = await fetch(
                 `https://api.imagekit.io/v1/files?name=${filename}`,
                 {
@@ -204,12 +212,21 @@ router.delete("/:id", authenticateToken, async (req, res) => {
                 }
               );
 
+              console.log(
+                `🗑️ ImageKit search response status: ${listResponse.status}`
+              );
+
               if (listResponse.ok) {
                 const files = await listResponse.json();
+                console.log(
+                  `🗑️ Found ${files.length} files with name: ${filename}`
+                );
 
                 if (files.length > 0) {
                   // Delete the file using its fileId
                   const fileId = files[0].fileId;
+                  console.log(`🗑️ Deleting file with ID: ${fileId}`);
+
                   const deleteResponse = await fetch(
                     `https://api.imagekit.io/v1/files/${fileId}`,
                     {
@@ -222,18 +239,94 @@ router.delete("/:id", authenticateToken, async (req, res) => {
                     }
                   );
 
+                  console.log(
+                    `🗑️ ImageKit delete response status: ${deleteResponse.status}`
+                  );
+
                   if (deleteResponse.ok) {
-                    console.log(`🗑️ Deleted ImageKit image: ${filename}`);
+                    console.log(
+                      `✅ Successfully deleted ImageKit image: ${filename}`
+                    );
                   } else {
+                    const errorText = await deleteResponse.text();
                     console.error(
-                      `Failed to delete ImageKit image: ${filename}`
+                      `❌ Failed to delete ImageKit image: ${filename}`,
+                      errorText
                     );
                   }
+                } else {
+                  console.log(`⚠️ No files found with name: ${filename}`);
+
+                  // Try alternative search - sometimes filenames might be different
+                  // Let's try searching for files in the experiences folder
+                  const folderResponse = await fetch(
+                    `https://api.imagekit.io/v1/files?path=/experiences/`,
+                    {
+                      method: "GET",
+                      headers: {
+                        Authorization: `Basic ${Buffer.from(
+                          process.env.IMAGEKIT_PRIVATE_KEY + ":"
+                        ).toString("base64")}`,
+                      },
+                    }
+                  );
+
+                  if (folderResponse.ok) {
+                    const folderFiles = await folderResponse.json();
+                    console.log(
+                      `🗑️ Found ${folderFiles.length} files in /experiences/ folder`
+                    );
+
+                    // Try to find the file by partial URL match
+                    const matchedFile = folderFiles.find(
+                      (file) =>
+                        file.url === imageUrl ||
+                        file.name === filename ||
+                        imageUrl.includes(file.name)
+                    );
+
+                    if (matchedFile) {
+                      console.log(
+                        `🗑️ Found matched file: ${matchedFile.name} (${matchedFile.fileId})`
+                      );
+
+                      const deleteResponse = await fetch(
+                        `https://api.imagekit.io/v1/files/${matchedFile.fileId}`,
+                        {
+                          method: "DELETE",
+                          headers: {
+                            Authorization: `Basic ${Buffer.from(
+                              process.env.IMAGEKIT_PRIVATE_KEY + ":"
+                            ).toString("base64")}`,
+                          },
+                        }
+                      );
+
+                      if (deleteResponse.ok) {
+                        console.log(
+                          `✅ Successfully deleted matched ImageKit image: ${matchedFile.name}`
+                        );
+                      } else {
+                        const errorText = await deleteResponse.text();
+                        console.error(
+                          `❌ Failed to delete matched ImageKit image: ${matchedFile.name}`,
+                          errorText
+                        );
+                      }
+                    } else {
+                      console.log(
+                        `⚠️ No matching file found for URL: ${imageUrl}`
+                      );
+                    }
+                  }
                 }
+              } else {
+                const errorText = await listResponse.text();
+                console.error(`❌ Failed to search ImageKit files:`, errorText);
               }
             } catch (imagekitError) {
               console.error(
-                `Error deleting ImageKit image ${filename}:`,
+                `❌ Error deleting ImageKit image ${filename}:`,
                 imagekitError.message
               );
             }
@@ -249,11 +342,11 @@ router.delete("/:id", authenticateToken, async (req, res) => {
             // Delete file if it exists
             if (fs.existsSync(filePath)) {
               fs.unlinkSync(filePath);
-              console.log(`🗑️ Deleted local image file: ${filename}`);
+              console.log(`✅ Deleted local image file: ${filename}`);
             }
           }
         } catch (fileError) {
-          console.error(`Error deleting image file: ${fileError.message}`);
+          console.error(`❌ Error deleting image file: ${fileError.message}`);
           // Continue with experience deletion even if file deletion fails
         }
       }
