@@ -1,6 +1,6 @@
 // ImageKit utility for uploading images
-const IMAGEKIT_ENDPOINT = "https://ik.imagekit.io/rxy27pb0a/";
-const IMAGEKIT_PUBLIC_KEY = "public_MKLeTf6L2Bb0vX4M7N8kZbDk6C4="; // This will need to be set from environment
+const IMAGEKIT_ENDPOINT = "https://ik.imagekit.io/rxy27pb0a";
+const IMAGEKIT_PUBLIC_KEY = "public_7IutnU1Psb823zilunZU3KP9meo="; // This will need to be set from environment
 
 export const imageKit = {
   // Upload multiple images to ImageKit
