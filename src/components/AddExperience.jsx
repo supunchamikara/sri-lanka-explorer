@@ -4,7 +4,6 @@ import { sriLankaData } from "../data/sriLankaData";
 import { api } from "../utils/api";
 import { useToast } from "../hooks/useToast";
 import Toast from "./Toast";
-import RichTextEditor from "./RichTextEditor";
 
 const AddExperience = () => {
   const navigate = useNavigate();
@@ -24,12 +23,6 @@ const AddExperience = () => {
   const [selectedProvince, setSelectedProvince] = useState(null);
   const [selectedDistrict, setSelectedDistrict] = useState(null);
   const [loading, setLoading] = useState(false);
-
-  // Helper function to check if text content is empty
-  const isTextEmpty = (content) => {
-    if (!content) return true;
-    return content.trim().length === 0;
-  };
 
   useEffect(() => {
     if (isEditing) {
@@ -144,7 +137,7 @@ const AddExperience = () => {
 
     if (
       !formData.title ||
-      isTextEmpty(formData.description) ||
+      !formData.description ||
       !formData.provinceId ||
       !formData.districtId ||
       !formData.cityName
@@ -312,18 +305,16 @@ const AddExperience = () => {
               <label className="block text-sm font-medium text-navy-blue mb-2">
                 Description *
               </label>
-              <RichTextEditor
+              <textarea
                 value={formData.description}
-                onChange={(value) =>
-                  setFormData({ ...formData, description: value })
+                onChange={(e) =>
+                  setFormData({ ...formData, description: e.target.value })
                 }
+                rows={6}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent-gold focus:border-transparent"
                 placeholder="Share the details of your amazing experience..."
-                className="mb-2"
+                required
               />
-              <p className="text-xs text-gray-500 mt-1">
-                Describe your experience in detail to help others plan their
-                trip.
-              </p>
             </div>
 
             {/* Image Upload */}

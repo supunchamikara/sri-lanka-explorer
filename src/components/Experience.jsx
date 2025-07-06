@@ -5,7 +5,6 @@ import { useToast } from "../hooks/useToast";
 import { useAuth } from "../context/AuthContext";
 import { SEOHelmet } from "../context/SEOContext";
 import Toast from "./Toast";
-import RichTextDisplay from "./RichTextDisplay";
 
 const Experience = () => {
   const { isAuthenticated, user } = useAuth();
@@ -489,13 +488,9 @@ const Experience = () => {
                         {experience.title}
                       </h3>
 
-                      <div className="text-gray-600 text-sm mb-3 min-h-[60px]">
-                        <RichTextDisplay
-                          content={experience.description}
-                          preview={true}
-                          maxLength={150}
-                        />
-                      </div>
+                      <p className="text-gray-600 text-sm mb-3 line-clamp-3 min-h-[60px]">
+                        {experience.description}
+                      </p>
 
                       {/* Location */}
                       <div className="flex items-center text-sm text-gray-600 mb-3">

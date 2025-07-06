@@ -5,7 +5,6 @@ import { api } from "../utils/api";
 import { useToast } from "../hooks/useToast";
 import { useAuth } from "../context/AuthContext";
 import Toast from "./Toast";
-import RichTextDisplay from "./RichTextDisplay";
 
 const CityExperiences = () => {
   const { provinceId, districtId, cityName } = useParams();
@@ -792,9 +791,9 @@ const CityExperiences = () => {
                         )}
                       </div>
 
-                      <div className="text-gray-700 leading-relaxed mb-4">
-                        <RichTextDisplay content={experience.description} />
-                      </div>
+                      <p className="text-gray-700 leading-relaxed mb-4">
+                        {experience.description}
+                      </p>
 
                       {/* Additional Images */}
                       {experience.images && experience.images.length > 1 && (
