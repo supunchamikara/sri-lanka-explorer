@@ -126,6 +126,84 @@ router.post("/imagekit-auth", authenticateToken, (req, res) => {
   }
 });
 
+// POST /api/upload/imagekit-delete - Delete image from ImageKit
+router.post("/imagekit-delete", authenticateToken, async (req, res) => {
+  try {
+    const { imageUrl, filename } = req.body;
+
+    if (!imageUrl || !filename) {
+      return res.status(400).json({
+        status: "error",
+        message: "Image URL and filename are required",
+      });
+    }
+
+    // Extract fileId from ImageKit URL
+    // ImageKit URLs typically look like: https://ik.imagekit.io/rxy27pb0a/experiences/filename.jpg
+    // We need to get the fileId to delete the image
+
+    // For ImageKit deletion, we need to use the Management API
+    // First, let's try to find the file by name
+    const listResponse = await fetch(
+      `https://api.imagekit.io/v1/files?name=${filename}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Basic ${Buffer.from(
+            IMAGEKIT_PRIVATE_KEY + ":"
+          ).toString("base64")}`,
+        },
+      }
+    );
+
+    if (!listResponse.ok) {
+      throw new Error("Failed to find file in ImageKit");
+    }
+
+    const files = await listResponse.json();
+
+    if (files.length === 0) {
+      return res.status(404).json({
+        status: "error",
+        message: "File not found in ImageKit",
+      });
+    }
+
+    // Delete the file using its fileId
+    const fileId = files[0].fileId;
+    const deleteResponse = await fetch(
+      `https://api.imagekit.io/v1/files/${fileId}`,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: `Basic ${Buffer.from(
+            IMAGEKIT_PRIVATE_KEY + ":"
+          ).toString("base64")}`,
+        },
+      }
+    );
+
+    if (!deleteResponse.ok) {
+      const errorData = await deleteResponse.json();
+      throw new Error(
+        errorData.message || "Failed to delete image from ImageKit"
+      );
+    }
+
+    res.json({
+      status: "success",
+      message: "Image deleted from ImageKit successfully",
+      fileId: fileId,
+    });
+  } catch (error) {
+    console.error("ImageKit delete error:", error);
+    res.status(500).json({
+      status: "error",
+      message: error.message || "Failed to delete image from ImageKit",
+    });
+  }
+});
+
 // POST /api/upload - Upload multiple images
 router.post("/", authenticateToken, upload.array("images", 10), (req, res) => {
   try {

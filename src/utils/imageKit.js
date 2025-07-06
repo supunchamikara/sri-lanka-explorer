@@ -19,6 +19,23 @@ export const imageKit = {
   uploadSingleImage: async (file) => {
     return uploadSingleImage(file);
   },
+
+  // Delete multiple images from ImageKit
+  deleteImages: async (imageUrls) => {
+    try {
+      const deletePromises = imageUrls.map((url) => deleteSingleImage(url));
+      const results = await Promise.all(deletePromises);
+      return results;
+    } catch (error) {
+      console.error("Error deleting images from ImageKit:", error);
+      throw error;
+    }
+  },
+
+  // Delete a single image from ImageKit
+  deleteSingleImage: async (imageUrl) => {
+    return deleteSingleImage(imageUrl);
+  },
 };
 
 // Helper function to upload a single image
@@ -79,6 +96,42 @@ const uploadSingleImage = async (file) => {
     };
   } catch (error) {
     console.error("Error uploading single image:", error);
+    throw error;
+  }
+};
+
+// Helper function to delete a single image
+const deleteSingleImage = async (imageUrl) => {
+  try {
+    // Extract filename from ImageKit URL
+    // ImageKit URLs typically look like: https://ik.imagekit.io/rxy27pb0a/experiences/filename.jpg
+    const urlParts = imageUrl.split("/");
+    const filename = urlParts[urlParts.length - 1];
+
+    // Use backend endpoint to delete from ImageKit
+    const deleteResponse = await fetch("/api/upload/imagekit-delete", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+      body: JSON.stringify({
+        imageUrl: imageUrl,
+        filename: filename,
+      }),
+    });
+
+    if (!deleteResponse.ok) {
+      const errorData = await deleteResponse.json();
+      throw new Error(
+        errorData.message || "Failed to delete image from ImageKit"
+      );
+    }
+
+    const deleteResult = await deleteResponse.json();
+    return deleteResult;
+  } catch (error) {
+    console.error("Error deleting single image:", error);
     throw error;
   }
 };
