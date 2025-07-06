@@ -8,6 +8,9 @@ require("dotenv").config();
 
 const app = express();
 
+// Trust proxy for Heroku
+app.set("trust proxy", 1);
+
 // Middleware
 app.use(
   helmet({

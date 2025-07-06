@@ -97,7 +97,12 @@ router.post("/", authenticateToken, upload.array("images", 10), (req, res) => {
     }
 
     // Generate URLs for the uploaded files
-    const baseUrl = `${req.protocol}://${req.get("host")}`;
+    // Force HTTPS on production (Heroku) - check for forwarded protocol header
+    const isProduction = process.env.NODE_ENV === "production";
+    const protocol = isProduction
+      ? "https"
+      : req.get("x-forwarded-proto") || req.protocol;
+    const baseUrl = `${protocol}://${req.get("host")}`;
     const imageUrls = req.files.map((file) => {
       return `${baseUrl}/uploads/experiences/${file.filename}`;
     });
