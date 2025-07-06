@@ -25,12 +25,10 @@ const AddExperience = () => {
   const [selectedDistrict, setSelectedDistrict] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  // Helper function to check if rich text content is empty
-  const isRichTextEmpty = (content) => {
+  // Helper function to check if text content is empty
+  const isTextEmpty = (content) => {
     if (!content) return true;
-    // Remove HTML tags and check if there's any meaningful content
-    const textContent = content.replace(/<[^>]*>/g, "").trim();
-    return textContent.length === 0;
+    return content.trim().length === 0;
   };
 
   useEffect(() => {
@@ -146,7 +144,7 @@ const AddExperience = () => {
 
     if (
       !formData.title ||
-      isRichTextEmpty(formData.description) ||
+      isTextEmpty(formData.description) ||
       !formData.provinceId ||
       !formData.districtId ||
       !formData.cityName
@@ -323,8 +321,8 @@ const AddExperience = () => {
                 className="mb-2"
               />
               <p className="text-xs text-gray-500 mt-1">
-                Use the formatting tools above to style your description with
-                headings, lists, links, and more.
+                Describe your experience in detail to help others plan their
+                trip.
               </p>
             </div>
 

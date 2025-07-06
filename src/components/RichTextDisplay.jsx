@@ -6,38 +6,39 @@ const RichTextDisplay = ({
   maxLength = null,
   preview = false,
 }) => {
-  // Sanitize and display HTML content safely
-  const createMarkup = () => {
+  // Process plain text content
+  const processContent = () => {
+    if (!content) return "";
+
     let processedContent = content;
 
-    if (preview && content) {
-      // For preview mode, strip HTML and truncate text
-      const textContent = content.replace(/<[^>]*>/g, "").trim();
-      if (maxLength && textContent.length > maxLength) {
-        processedContent = textContent.substring(0, maxLength) + "...";
-      } else {
-        processedContent = textContent;
-      }
+    // For preview mode, truncate text
+    if (preview && maxLength && content.length > maxLength) {
+      processedContent = content.substring(0, maxLength) + "...";
     }
 
-    return { __html: processedContent };
+    return processedContent;
   };
 
-  if (!content) {
+  const displayContent = processContent();
+
+  if (!displayContent) {
     return null;
   }
 
   return (
     <div
-      className={`rich-text-display ${
-        preview ? "rich-text-preview" : ""
+      className={`simple-text-display ${
+        preview ? "simple-text-preview" : ""
       } ${className}`}
-      dangerouslySetInnerHTML={createMarkup()}
       style={{
         wordBreak: "break-word",
         lineHeight: "1.6",
+        whiteSpace: "pre-wrap", // Preserve line breaks and whitespace
       }}
-    />
+    >
+      {displayContent}
+    </div>
   );
 };
 
