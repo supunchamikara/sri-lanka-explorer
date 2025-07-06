@@ -30,17 +30,31 @@ const uploadSingleImage = async (file) => {
     const fileExtension = file.name.split(".").pop();
     const fileName = `experience-${timestamp}-${randomId}.${fileExtension}`;
 
+    // Get authentication parameters from backend
+    const authResponse = await fetch("/api/upload/imagekit-auth", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+
+    if (!authResponse.ok) {
+      throw new Error("Failed to get ImageKit authentication");
+    }
+
+    const authResponseData = await authResponse.json();
+    const authData = authResponseData.data;
+
     // Create form data for ImageKit upload
     const formData = new FormData();
     formData.append("file", file);
     formData.append("fileName", fileName);
     formData.append("folder", "/experiences/");
     formData.append("publicKey", IMAGEKIT_PUBLIC_KEY);
-
-    // Generate authentication parameters (in a real app, this should be done on the server)
-    const token = generateImageKitToken();
-    formData.append("signature", token.signature);
-    formData.append("expire", token.expire);
+    formData.append("signature", authData.signature);
+    formData.append("expire", authData.expire);
+    formData.append("token", authData.token);
 
     const response = await fetch(
       "https://upload.imagekit.io/api/v1/files/upload",
@@ -67,15 +81,4 @@ const uploadSingleImage = async (file) => {
     console.error("Error uploading single image:", error);
     throw error;
   }
-};
-
-// Simple token generation for demo (in production, this should be done on server)
-const generateImageKitToken = () => {
-  const expire = Math.floor(Date.now() / 1000) + 2400; // 40 minutes from now
-  // For demo purposes, we'll use a simplified approach
-  // In production, you should generate this on your server
-  return {
-    signature: "demo-signature", // This should be properly generated
-    expire: expire,
-  };
 };
