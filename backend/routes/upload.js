@@ -3,7 +3,6 @@ const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
 const jwt = require("jsonwebtoken");
-const crypto = require("crypto");
 const User = require("../models/User");
 
 const router = express.Router();
@@ -12,9 +11,9 @@ const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
 
 // ImageKit configuration
 const IMAGEKIT_PUBLIC_KEY =
-  process.env.IMAGEKIT_PUBLIC_KEY || "public_MKLeTf6L2Bb0vX4M7N8kZbDk6C4=";
+  process.env.IMAGEKIT_PUBLIC_KEY || "public_7IutnU1Psb823zilunZU3KP9meo=";
 const IMAGEKIT_PRIVATE_KEY =
-  process.env.IMAGEKIT_PRIVATE_KEY || "private_Q4Gc4LlrBY2vy6t8V4PfPP8T6PQ=";
+  process.env.IMAGEKIT_PRIVATE_KEY || "private_d31D6bzpzOrts6mE4k6RLvqspQo=";
 const IMAGEKIT_URL_ENDPOINT =
   process.env.IMAGEKIT_URL_ENDPOINT || "https://ik.imagekit.io/rxy27pb0a/";
 
@@ -98,6 +97,8 @@ const upload = multer({
 // POST /api/upload/imagekit-auth - Get authentication parameters for ImageKit client-side upload
 router.post("/imagekit-auth", authenticateToken, (req, res) => {
   try {
+    const crypto = require("crypto");
+
     // Generate authentication parameters for ImageKit
     const token = req.body.token || crypto.randomUUID();
     const expire = Math.floor(Date.now() / 1000) + 2400; // 40 minutes from now
@@ -122,84 +123,6 @@ router.post("/imagekit-auth", authenticateToken, (req, res) => {
     res.status(500).json({
       status: "error",
       message: "Failed to generate authentication parameters",
-    });
-  }
-});
-
-// POST /api/upload/imagekit-delete - Delete image from ImageKit
-router.post("/imagekit-delete", authenticateToken, async (req, res) => {
-  try {
-    const { imageUrl, filename } = req.body;
-
-    if (!imageUrl || !filename) {
-      return res.status(400).json({
-        status: "error",
-        message: "Image URL and filename are required",
-      });
-    }
-
-    // Extract fileId from ImageKit URL
-    // ImageKit URLs typically look like: https://ik.imagekit.io/rxy27pb0a/experiences/filename.jpg
-    // We need to get the fileId to delete the image
-
-    // For ImageKit deletion, we need to use the Management API
-    // First, let's try to find the file by name
-    const listResponse = await fetch(
-      `https://api.imagekit.io/v1/files?name=${filename}`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Basic ${Buffer.from(
-            IMAGEKIT_PRIVATE_KEY + ":"
-          ).toString("base64")}`,
-        },
-      }
-    );
-
-    if (!listResponse.ok) {
-      throw new Error("Failed to find file in ImageKit");
-    }
-
-    const files = await listResponse.json();
-
-    if (files.length === 0) {
-      return res.status(404).json({
-        status: "error",
-        message: "File not found in ImageKit",
-      });
-    }
-
-    // Delete the file using its fileId
-    const fileId = files[0].fileId;
-    const deleteResponse = await fetch(
-      `https://api.imagekit.io/v1/files/${fileId}`,
-      {
-        method: "DELETE",
-        headers: {
-          Authorization: `Basic ${Buffer.from(
-            IMAGEKIT_PRIVATE_KEY + ":"
-          ).toString("base64")}`,
-        },
-      }
-    );
-
-    if (!deleteResponse.ok) {
-      const errorData = await deleteResponse.json();
-      throw new Error(
-        errorData.message || "Failed to delete image from ImageKit"
-      );
-    }
-
-    res.json({
-      status: "success",
-      message: "Image deleted from ImageKit successfully",
-      fileId: fileId,
-    });
-  } catch (error) {
-    console.error("ImageKit delete error:", error);
-    res.status(500).json({
-      status: "error",
-      message: error.message || "Failed to delete image from ImageKit",
     });
   }
 });

@@ -27,8 +27,6 @@ app.use(
           "'self'",
           "https://www.google-analytics.com",
           "https://analytics.google.com",
-          "https://upload.imagekit.io",
-          "https://ik.imagekit.io",
         ],
         fontSrc: ["'self'", "data:", "https:"],
         objectSrc: ["'none'"],
